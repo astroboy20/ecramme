@@ -59,11 +59,11 @@ const Sidebar = () => {
       </Link>
       <Link
         className={`${
-          pathname === "/costal-flood"
+          pathname === "/land-cover"
             ? "bg-[#ECF5FB] text-black p-3 rounded-[4px]"
             : ""
         }`}
-        href="/"
+        href="land-cover"
       >
         Land Cover
       </Link>
