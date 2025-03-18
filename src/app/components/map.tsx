@@ -27,9 +27,9 @@ const MapContainer = () => {
 
   return (
     <div
-    className="h-screen w-full absolute"
+    className="h-screen w-full"
       ref={mapContainerRef}
-      // style={{ width: "100%", height: "100%" }}  
+      style={{ width: "100%", height: "100%" }}  
     />
   );
 };
