@@ -29,31 +29,31 @@ const Sidebar = () => {
       </Link>
       <Link
         className={`${
+          pathname === "/sea-level"
+            ? "bg-[#ECF5FB] text-black p-3 rounded-[4px]"
+            : ""
+        }`}
+        href="/sea-level"
+      >
+        Sea Level Rise
+      </Link>
+      <Link
+        className={`${
           pathname === "/marine-heatwaves"
             ? "bg-[#ECF5FB] text-black p-3 rounded-[4px]"
             : ""
         }`}
         href="/marine-heatwaves"
       >
-        Sea Level Rise
-      </Link>
-      <Link
-        className={`${
-          pathname === "/costal-flood"
-            ? "bg-[#ECF5FB] text-black p-3 rounded-[4px]"
-            : ""
-        }`}
-        href="/"
-      >
         Marine Heatwaves
       </Link>
       <Link
         className={`${
-          pathname === "/costal-flood"
+          pathname === "/storm-surges"
             ? "bg-[#ECF5FB] text-black p-3 rounded-[4px]"
             : ""
         }`}
-        href="/"
+        href="/storm-surges"
       >
         Storm Surges
       </Link>
