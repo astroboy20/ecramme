@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -21,8 +22,6 @@
     text-wrap: balance;
   }
 }
-
-
 
 @layer base {
   :root {
@@ -80,13 +79,18 @@
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
+    font-family: "Montserrat", sans-serif;
+  }
+  #map-container {
+    height: 100%;
+    width: 100%;
+    /* temporarily set the background color so we can tell where the map container is positioned */
+    background-color: lightgrey;
   }
 }
