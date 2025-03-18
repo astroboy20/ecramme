@@ -9,11 +9,9 @@ const Sidebar = () => {
     <div className="flex flex-col gap-[40px] bg-[#18252F] py-10 px-5 font-[500] leading-[100%] text-white h-fit w-[300px]">
       <Link
         className={`${
-          pathname === "/costal-flood"
-            ? "bg-[#ECF5FB] text-black p-3 rounded-[4px]"
-            : ""
+          pathname === "/" ? "bg-[#ECF5FB] text-black p-3 rounded-[4px]" : ""
         }`}
-        href="/costal-flood"
+        href="/"
       >
         Coastal Floods
       </Link>
@@ -23,7 +21,7 @@ const Sidebar = () => {
             ? "bg-[#ECF5FB] text-black p-3 rounded-[4px]"
             : ""
         }`}
-        href="/flash-flood"
+        href="/"
       >
         Flash Flood
       </Link>
@@ -69,11 +67,11 @@ const Sidebar = () => {
       </Link>
       <Link
         className={`${
-          pathname === "/costal-flood"
+          pathname === "/costal-erosion"
             ? "bg-[#ECF5FB] text-black p-3 rounded-[4px]"
             : ""
         }`}
-        href="/"
+        href="/costal-erosion"
       >
         Coastal Erosion
       </Link>
