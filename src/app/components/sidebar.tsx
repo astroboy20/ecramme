@@ -82,9 +82,9 @@ const Sidebar = () => {
         FORECASTING & EARLY WARNING SYSTEMS
         <Link
           className={`${
-            pathname === "/" ? "bg-[#ECF5FB] text-black p-2 rounded-[4px]" : ""
+            pathname === "/projected-forecasting" ? "bg-[#ECF5FB] text-black p-2 rounded-[4px]" : ""
           }`}
-          href="/"
+          href="/projected-forecasting"
         >
           Projected Forecasting & Prediction
         </Link>
