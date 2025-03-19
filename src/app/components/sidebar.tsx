@@ -90,11 +90,11 @@ const Sidebar = () => {
         </Link>
         <Link
           className={`${
-            pathname === "/flash-flood"
+            pathname === "/projected-sea-level"
               ? "bg-[#ECF5FB] text-black p-2 rounded-[4px]"
               : ""
           }`}
-          href="/flash-flood"
+          href="/projected-sea-level"
         >
           Projected Sea Level Rise
         </Link>
