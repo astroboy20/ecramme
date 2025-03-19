@@ -108,10 +108,10 @@ const Sidebar = () => {
         </Link>
         <Link
           className={`${
-            pathname === "/marine-heatwaves"
+            pathname === "/projected-storm"
               ? "bg-[#ECF5FB] text-black p-2 rounded-[4px]" : ""
           }`}
-          href="/marine-heatwaves"
+          href="/projected-storm"
         >
           Projected Storms
         </Link>
