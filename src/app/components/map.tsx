@@ -15,7 +15,7 @@ const MapContainer = () => {
 
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: "mapbox://styles/mapbox/streets-v11", 
+      style: "mapbox://styles/mapbox/streets-v11",
       center: [-74.0242, 40.6941],
       zoom: 10.12,
     });
@@ -26,11 +26,9 @@ const MapContainer = () => {
   }, []);
 
   return (
-    <div
-    className="h-screen w-full"
-      ref={mapContainerRef}
-    />
+    <div className="h-full w-full overflow-hidden" ref={mapContainerRef} />
   );
 };
 
 export { MapContainer };
+

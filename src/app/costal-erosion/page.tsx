@@ -1,9 +1,9 @@
-import { CostalErosion } from "./container/costal-erosion";
+import { CoastalErosion } from "./container/costal-erosion";
 
 export default function Page() {
   return (
     <main className="flex min-h-screen ">
-      <CostalErosion />
+      <CoastalErosion />
     </main>
   );
 }

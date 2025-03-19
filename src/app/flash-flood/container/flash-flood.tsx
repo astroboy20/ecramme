@@ -11,7 +11,7 @@ const FlashFlood = () => {
       <div className="fixed w-full z-[1000000]">
         <Header />
       </div>
-      <div className=" absolute top-28 px-7  flex justify-between z-[1000000] w-full">
+      <div className=" absolute top-24 px-7  flex justify-between z-[1000000] w-full">
         <div className=" w-fit ">
           <Sidebar />
         </div>
