@@ -29,7 +29,6 @@ const MapContainer = () => {
     <div
     className="h-screen w-full"
       ref={mapContainerRef}
-      style={{ width: "100%", height: "100%" }}  
     />
   );
 };

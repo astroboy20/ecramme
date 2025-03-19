@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 const Sidebar = () => {
   const pathname = usePathname();
   return (
-    <div className="flex flex-col gap-[40px] bg-[#18252F] py-10 px-5 font-[500] leading-[100%] text-white h-fit w-[300px]">
+    <div className="flex flex-col gap-[40px] bg-[#18252F] py-10 px-5 font-[500] leading-[100%] text-white w-[300px]">
       <Link
         className={`${
           pathname === "/" ? "bg-[#ECF5FB] text-black p-3 rounded-[4px]" : ""
@@ -21,7 +21,7 @@ const Sidebar = () => {
             ? "bg-[#ECF5FB] text-black p-3 rounded-[4px]"
             : ""
         }`}
-        href="/"
+        href="/flash-flood"
       >
         Flash Flood
       </Link>
