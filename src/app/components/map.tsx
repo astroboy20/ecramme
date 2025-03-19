@@ -34,7 +34,7 @@ const MapContainer = ({ setZoomIn, setZoomOut }: MapContainerProps) => {
     };
   }, [setZoomIn, setZoomOut]);
 
-  return <div className="h-full w-full overflow-hidden" ref={mapContainerRef} />;
+  return <div className="h-screen w-full" ref={mapContainerRef} />;
 };
 
 export { MapContainer };

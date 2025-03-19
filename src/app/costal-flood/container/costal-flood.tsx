@@ -12,11 +12,10 @@ const CoastalFlood = () => {
     <div className="w-full">
       {/* ✅ Fixed Header */}
       <div className="fixed w-full z-[1000000]">
-        {/* <Header /> */}
+        <Header />
       </div>
 
-      {/* ✅ Use Reusable Component */}
-      {/* <MapWithControls showSidebar={true} showExportButton={true} /> */}
+      <MapWithControls showSidebar={true} showExportButton={true} />
     </div>
   );
 };

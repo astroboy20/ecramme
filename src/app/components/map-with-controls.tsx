@@ -1,4 +1,4 @@
-"use client";  // ✅ Required for Client Components
+"use client"; // ✅ Required for Client Components
 import { Sidebar } from "@/app/components/sidebar";
 import { Button } from "@/components/ui/button";
 import { Download, PlusIcon, MinusIcon } from "lucide-react";
@@ -10,7 +10,10 @@ interface MapWithControlsProps {
   showExportButton?: boolean;
 }
 
-const MapWithControls = ({ showSidebar = true, showExportButton = true }: MapWithControlsProps) => {
+const MapWithControls = ({
+  showSidebar = true,
+  showExportButton = true,
+}: MapWithControlsProps) => {
   const [zoomIn, setZoomIn] = useState<() => void>(() => () => {});
   const [zoomOut, setZoomOut] = useState<() => void>(() => () => {});
 
@@ -43,8 +46,7 @@ const MapWithControls = ({ showSidebar = true, showExportButton = true }: MapWit
         </div>
       </div>
 
-      {/* ✅ MapContainer */}
-      <div className="h-full w-full">
+      <div className="min-h-screen flex flex-col">
         <MapContainer setZoomIn={setZoomIn} setZoomOut={setZoomOut} />
       </div>
     </div>
