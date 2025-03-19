@@ -1,10 +1,15 @@
-"use client";
+"use client";  // ✅ Required for Client Components
 
 import { useRef, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-const MapContainer = () => {
+interface MapContainerProps {
+  setZoomIn: (zoomFn: () => void) => void;
+  setZoomOut: (zoomFn: () => void) => void;
+}
+
+const MapContainer = ({ setZoomIn, setZoomOut }: MapContainerProps) => {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -20,15 +25,16 @@ const MapContainer = () => {
       zoom: 10.12,
     });
 
+    // ✅ Expose zoom functions
+    setZoomIn(() => () => mapRef.current?.zoomIn());
+    setZoomOut(() => () => mapRef.current?.zoomOut());
+
     return () => {
       mapRef.current?.remove();
     };
-  }, []);
+  }, [setZoomIn, setZoomOut]);
 
-  return (
-    <div className="h-full w-full overflow-hidden" ref={mapContainerRef} />
-  );
+  return <div className="h-full w-full overflow-hidden" ref={mapContainerRef} />;
 };
 
 export { MapContainer };
-
