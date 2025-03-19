@@ -91,7 +91,8 @@ const Sidebar = () => {
         <Link
           className={`${
             pathname === "/flash-flood"
-              ? "bg-[#ECF5FB] text-black p-2 rounded-[4px]" : ""
+              ? "bg-[#ECF5FB] text-black p-2 rounded-[4px]"
+              : ""
           }`}
           href="/flash-flood"
         >
@@ -99,17 +100,19 @@ const Sidebar = () => {
         </Link>
         <Link
           className={`${
-            pathname === "/sea-level"
-              ? "bg-[#ECF5FB] text-black p-2 rounded-[4px]" : ""
+            pathname === "/projected-marine-heatwaves"
+              ? "bg-[#ECF5FB] text-black p-2 rounded-[4px]"
+              : ""
           }`}
-          href="/sea-level"
+          href="/projected-marine-heatwaves"
         >
           Projected Marine Heatwaves
         </Link>
         <Link
           className={`${
             pathname === "/projected-storm"
-              ? "bg-[#ECF5FB] text-black p-2 rounded-[4px]" : ""
+              ? "bg-[#ECF5FB] text-black p-2 rounded-[4px]"
+              : ""
           }`}
           href="/projected-storm"
         >
@@ -121,4 +124,3 @@ const Sidebar = () => {
 };
 
 export { Sidebar };
-
