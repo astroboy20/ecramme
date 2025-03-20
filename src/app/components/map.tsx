@@ -21,8 +21,8 @@ const MapContainer = ({ setZoomIn, setZoomOut }: MapContainerProps) => {
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [-74.0242, 40.6941],
-      zoom: 10.12,
+      center: [-5.5471, 7.7460], // 🌍 Updated to focus on West Africa
+      zoom: 5.5, // 🔍 Adjusted zoom for better regional view
     });
 
     // ✅ Expose zoom functions
