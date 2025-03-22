@@ -12,17 +12,15 @@ const Sidebar = () => {
   const [isOpenForecast, setIsOpenForecast] = useState(false);
 
   return (
-    <div className="flex flex-col gap-[40px] bg-[#18252F] py-10 px-5 font-[500] leading-[100%] text-white w-[300px] h-[500px] overflow-y-auto">
+    <div className="flex flex-col gap-[40px] bg-[#18252F] py-10 px-5 text-[10px] font-[500] leading-[100%] text-white w-[300px] h-[500px] overflow-y-auto">
       {/* Coastal Hazards Section */}
       <div className="flex flex-col gap-[10px]">
         <button
           onClick={() => setIsOpenCoastal(!isOpenCoastal)}
           className="flex flex-col items-start focus:outline-none"
         >
-          <p>COASTAL HAZARDS AND </p>
-          <p className="flex items-center">
-            VULNERABILITY {isOpenCoastal ? <ChevronUp /> : <ChevronDown />}
-          </p>
+          <p className="text-[14px]">COASTAL HAZARDS AND </p>
+         
         </button>
 
         {/* Animated collapsible container */}
@@ -108,10 +106,8 @@ const Sidebar = () => {
           onClick={() => setIsOpenForecast(!isOpenForecast)}
           className="flex flex-col items-start focus:outline-none"
         >
-          <p>FORECASTING & EARLY</p>
-          <p className="flex items-center">
-            WARNING SYSTEMS {isOpenForecast ? <ChevronUp /> : <ChevronDown />}
-          </p>
+          <p className="text-[14px]">FORECASTING & EARLY WARNING SYSTEMS {isOpenForecast ? <ChevronUp /> : <ChevronDown />}</p>
+         
         </button>
 
         {/* Animated collapsible container */}
