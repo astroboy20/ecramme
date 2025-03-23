@@ -16,6 +16,11 @@ const MapWithControls = ({
 }: MapWithControlsProps) => {
   const [zoomIn, setZoomIn] = useState<() => void>(() => () => {});
   const [zoomOut, setZoomOut] = useState<() => void>(() => () => {});
+  const [isDownload, setIsDownload] = useState(false);
+
+  const toggleDownload = () => {
+    setIsDownload((prev) => !prev);
+  };
 
   return (
     <div className="w-full">
@@ -24,9 +29,27 @@ const MapWithControls = ({
         {showSidebar && <Sidebar />}
         <div className="flex flex-col">
           {showExportButton && (
-            <Button className="bg-black text-white p-3 rounded-[4px] py-[18px] px-6 h-[45px] font-[500] w-fit ml-auto">
-              Export <Download />
-            </Button>
+            <div className="relative">
+              <Button
+                onClick={toggleDownload}
+                className="bg-black text-white p-3 rounded-[4px] py-[18px] px-6 h-[45px] font-[500] w-fit ml-auto flex items-center gap-2"
+              >
+                Export <Download />
+              </Button>
+              {/* Animated export options */}
+              <div
+                className={`absolute right-0 mt-2 bg-white shadow-lg border border-gray-200 rounded p-3 transition-all duration-300 ease-in-out ${
+                  isDownload ? "opacity-100 translate-y-0 visible" : "opacity-0 -translate-y-2 invisible"
+                }`}
+              >
+                <p className="cursor-pointer hover:underline" onClick={() => setIsDownload(false)}>
+                  Export as raster file
+                </p>
+                <p className="cursor-pointer hover:underline" onClick={() => setIsDownload(false)}>
+                  Export as csv file
+                </p>
+              </div>
+            </div>
           )}
           <div className="flex gap-10 mt-auto">
             <Button className="bg-white text-black p-3 rounded-[4px] py-[18px] px-6 h-[45px] font-[500] mt-auto border border-[#18252F]">
