@@ -1,4 +1,4 @@
-"use client"; // ✅ Required for Client Components
+"use client";
 import { Sidebar } from "@/app/components/sidebar";
 import { Button } from "@/components/ui/button";
 import { Download, PlusIcon, MinusIcon } from "lucide-react";
@@ -36,16 +36,23 @@ const MapWithControls = ({
               >
                 Export <Download />
               </Button>
-              {/* Animated export options */}
               <div
                 className={`absolute right-0 mt-2 bg-white shadow-lg border border-gray-200 rounded p-3 transition-all duration-300 ease-in-out ${
-                  isDownload ? "opacity-100 translate-y-0 visible" : "opacity-0 -translate-y-2 invisible"
+                  isDownload
+                    ? "opacity-100 translate-y-0 visible"
+                    : "opacity-0 -translate-y-2 invisible"
                 }`}
               >
-                <p className="cursor-pointer hover:underline" onClick={() => setIsDownload(false)}>
+                <p
+                  className="cursor-pointer hover:underline"
+                  onClick={() => setIsDownload(false)}
+                >
                   Export as raster file
                 </p>
-                <p className="cursor-pointer hover:underline" onClick={() => setIsDownload(false)}>
+                <p
+                  className="cursor-pointer hover:underline"
+                  onClick={() => setIsDownload(false)}
+                >
                   Export as csv file
                 </p>
               </div>
@@ -56,11 +63,9 @@ const MapWithControls = ({
               View Legend
             </Button>
             <div className="flex flex-col gap-4">
-              {/* ✅ Zoom In Button */}
               <Button className="w-fit bg-[#18252F]" onClick={zoomIn}>
                 <PlusIcon />
               </Button>
-              {/* ✅ Zoom Out Button */}
               <Button className="w-fit bg-[#18252F]" onClick={zoomOut}>
                 <MinusIcon />
               </Button>
