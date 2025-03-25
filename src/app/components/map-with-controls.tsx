@@ -14,8 +14,8 @@ const MapWithControls = ({
   showSidebar = true,
   showExportButton = true,
 }: MapWithControlsProps) => {
-  const [zoomIn, setZoomIn] = useState<() => void>(() => () => {});
-  const [zoomOut, setZoomOut] = useState<() => void>(() => () => {});
+  const [zoomIn, setZoomIn] = useState<(() => void) | null>(null);
+  const [zoomOut, setZoomOut] = useState<(() => void) | null>(null);
   const [isDownload, setIsDownload] = useState(false);
 
   const toggleDownload = () => {
@@ -23,60 +23,74 @@ const MapWithControls = ({
   };
 
   return (
-    <div className="w-full">
-      {/* ✅ Sidebar & Controls */}
-      <div className="absolute top-24 px-7 flex justify-between z-[1000000] w-full">
-        {showSidebar && <Sidebar />}
-        <div className="flex flex-col">
-          <div className="flex gap-10 mt-0">
-            {/* ✅ Zoom Buttons */}
-            <div className="flex flex-col gap-1 left-16   relative">
-              <Button className="w-fit bg-[#2C3E50] p-2 rounded-md hover:bg-[#34495E] transition-colors" onClick={zoomIn}>
-                <ZoomIn />
-              </Button>
-              <div
-                className={`absolute right-0 mt-2 bg-white shadow-lg border border-gray-200 rounded p-3 transition-all duration-300 ease-in-out ${
-                  isDownload
-                    ? "opacity-100 translate-y-0 visible"
-                    : "opacity-0 -translate-y-2 invisible"
-                }`}
-              >
-                <p
-                  className="cursor-pointer hover:underline"
-                  onClick={() => setIsDownload(false)}
-                >
-                  Export as raster file
-                </p>
-                <p
-                  className="cursor-pointer hover:underline"
-                  onClick={() => setIsDownload(false)}
-                >
-                  Export as csv file
-                </p>
-              </div>
-            </div>
-          )}
-          <div className="flex gap-10 mt-auto">
-            <Button className="bg-white text-black p-3 rounded-[4px] py-[18px] px-6 h-[45px] font-[500] mt-auto border border-[#18252F]">
-              View Legend
-            </Button>
-            <div className="flex flex-col gap-4">
-              <Button className="w-fit bg-[#18252F]" onClick={zoomIn}>
-                <ZoomIn />
-              </Button>
-              <Button className="w-fit bg-[#18252F]" onClick={zoomOut}>
-                <ZoomOut />
-              </Button>
-            </div>
-          </div>
+    <div className="w-full relative">
+      {/* Sidebar */}
+      {showSidebar && (
+        <div className="absolute top-24 left-7 z-[1000]">
+          <Sidebar />
         </div>
+      )}
+
+      {/* Zoom Buttons - Left Side */}
+      <div className="absolute left-96 top-36 transform -translate-y-1/2 z-[1000] flex flex-col space-y-2">
+        <Button 
+          className="w-fit bg-[#18252F] p-2 rounded-md hover:bg-[#34495E] transition-colors" 
+          onClick={() => zoomIn && zoomIn()}
+        >
+          <ZoomIn />
+        </Button>
+        <Button 
+          className="w-fit bg-[#18252F] p-2 rounded-md hover:bg-[#34495E] transition-colors" 
+          onClick={() => zoomOut && zoomOut()}
+        >
+          <ZoomOut />
+        </Button>
+      </div>
+
+      {/* Bottom Left Controls */}
+      <div className="absolute bottom-7 left-96 z-[1000] flex flex-col space-y-2">
+        <div className="relative">
+          {showExportButton && (
+            <>
+              <Button 
+                className="w-fit bg-[#18252F] p-2 rounded-md hover:bg-[#34495E] transition-colors mb-2"
+                onClick={toggleDownload}
+              >
+                <Download />
+              </Button>
+              {isDownload && (
+                <div className="absolute left-full ml-2 bottom-0 bg-white shadow-lg border border-gray-200 rounded p-3">
+                  <p
+                    className="cursor-pointer hover:underline"
+                    onClick={() => setIsDownload(false)}
+                  >
+                    Export as raster file
+                  </p>
+                  <p
+                    className="cursor-pointer hover:underline"
+                    onClick={() => setIsDownload(false)}
+                  >
+                    Export as CSV file
+                  </p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+        
+        <Button className="bg-white text-black p-3 rounded-[4px] border border-[#18252F]">
+          View Legend
+        </Button>
       </div>
 
       <div className="min-h-screen flex flex-col">
-        <MapContainer setZoomIn={setZoomIn} setZoomOut={setZoomOut} />
+        <MapContainer 
+          setZoomIn={setZoomIn} 
+          setZoomOut={setZoomOut} 
+        />
       </div>
     </div>
-  
+  );
 };
 
 export { MapWithControls };
