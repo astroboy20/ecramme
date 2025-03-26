@@ -9,11 +9,13 @@ import FeedModal from "./feedback";
 interface MapWithControlsProps {
   showSidebar?: boolean;
   showExportButton?: boolean;
+  coordinates?: Array<Array<[number, number]>>; 
 }
 
 const MapWithControls = ({
   showSidebar = true,
   showExportButton = true,
+  coordinates
 }: MapWithControlsProps) => {
   const [zoomIn, setZoomIn] = useState<(() => void) | null>(null);
   const [zoomOut, setZoomOut] = useState<(() => void) | null>(null);
@@ -84,14 +86,15 @@ const MapWithControls = ({
         </Button>
       </div>
 
-       <div className=" hover:bg-slate-800 rounded transition-all ease-linear duration-75">
-                  <FeedModal/>
-                  </div>
+      <div className="hover:bg-slate-800 rounded transition-all ease-linear duration-75">
+        <FeedModal/>
+      </div>
 
       <div className="min-h-screen flex flex-col">
         <MapContainer 
           setZoomIn={setZoomIn} 
-          setZoomOut={setZoomOut} 
+          setZoomOut={setZoomOut}
+          coordinates={coordinates}
         />
       </div>
     </div>
