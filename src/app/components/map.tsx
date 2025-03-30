@@ -9,6 +9,8 @@ import WestAfricaTestGeoJson from "../../../data"
 interface MapContainerProps {
   setZoomIn: (zoomFn: () => void) => void;
   setZoomOut: (zoomFn: () => void) => void;
+  // Each element is an array of coordinate pairs (each polygon).
+  coordinates?: Array<Array<[number, number]>>;
 }
 
 interface GeoJsonFeature {
@@ -25,7 +27,7 @@ interface GeoJsonFeature {
   };
 }
 
-const MapContainer = ({ setZoomIn, setZoomOut }: MapContainerProps) => {
+const MapContainer = ({ setZoomIn, setZoomOut, coordinates }: MapContainerProps) => {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -281,6 +283,7 @@ const MapContainer = ({ setZoomIn, setZoomOut }: MapContainerProps) => {
     }
   };
 
+  // Initialize the map
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
@@ -317,6 +320,47 @@ const MapContainer = ({ setZoomIn, setZoomOut }: MapContainerProps) => {
       mapRef.current?.remove();
     };
   }, [setZoomIn, setZoomOut]);
+
+  useEffect(() => {
+    if (!mapRef.current || !coordinates) return;
+
+    // Create a GeoJSON FeatureCollection
+    const geoJson: GeoJSON.FeatureCollection<GeoJSON.Geometry> = {
+      type: "FeatureCollection",
+      features: coordinates.map((coords, index) => ({
+        type: "Feature",
+        geometry: {
+          type: "Polygon",
+         
+          coordinates: [coords],
+        },
+        properties: {
+          id: index,
+        },
+      })),
+    };
+
+    // If the source already exists, update its data; otherwise, add it.
+    if (mapRef.current.getSource("floodFeatures")) {
+      (mapRef.current.getSource("floodFeatures") as mapboxgl.GeoJSONSource).setData(geoJson);
+    } else {
+      mapRef.current.addSource("floodFeatures", {
+        type: "geojson",
+        data: geoJson,
+      });
+
+      mapRef.current.addLayer({
+        id: "floodPolygons",
+        type: "fill",
+        source: "floodFeatures",
+        layout: {},
+        paint: {
+          "fill-color": "#FF0000", // Customize the fill color as needed
+          "fill-opacity": 0.5,
+        },
+      });
+    }
+  }, [coordinates]);
 
   return (
     <div className="relative h-screen w-full">

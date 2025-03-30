@@ -1,22 +1,35 @@
-"use client"
+"use client";
+import { useEffect, useState } from "react";
 import { Header } from "@/app/components/header";
-import { MapContainer } from "@/app/components/map";
 import { MapWithControls } from "@/app/components/map-with-controls";
-import { Sidebar } from "@/app/components/sidebar";
-import { Button } from "@/components/ui/button";
-import { Download, PlusIcon, MinusIcon } from "lucide-react";
-import { useRef } from "react";
+import axios from "axios";
 
 const FlashFlood = () => {
+  const [coordinates, setCoordinates] = useState<[number, number][][] | undefined>(undefined);
+
+  useEffect(() => {
+    axios
+      .get(
+        "http://ec2-52-14-7-103.us-east-2.compute.amazonaws.com/api/collections/55cd0bed-2f4a-46b9-bc40-8f309e607551"
+      )
+      .then((response) => {
+        const features = response.data.features;
+        const allCoordinates = features.map((feature: { coordinates: any }) => feature.coordinates);
+        setCoordinates(allCoordinates);
+        console.log(allCoordinates);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   return (
     <div className="w-full">
-      {/* ✅ Fixed Header */}
       <div className="fixed w-full z-[100000000000000]">
         <Header />
       </div>
-
-      {/* ✅ Use Reusable Component */}
-      <MapWithControls showSidebar={true} showExportButton={true} />
+      {/* Pass the extracted coordinates to your map component */}
+      <MapWithControls showSidebar={true} showExportButton={true} coordinates={coordinates} />
     </div>
   );
 };

@@ -10,11 +10,13 @@ import AboutModal from "./about";
 interface MapWithControlsProps {
   showSidebar?: boolean;
   showExportButton?: boolean;
+  coordinates?: Array<Array<[number, number]>>; 
 }
 
 const MapWithControls = ({
   showSidebar = true,
   showExportButton = true,
+  coordinates
 }: MapWithControlsProps) => {
   const [zoomIn, setZoomIn] = useState<(() => void) | null>(null);
   const [zoomOut, setZoomOut] = useState<(() => void) | null>(null);
@@ -93,7 +95,8 @@ const MapWithControls = ({
       <div className="min-h-screen flex flex-col">
         <MapContainer 
           setZoomIn={setZoomIn} 
-          setZoomOut={setZoomOut} 
+          setZoomOut={setZoomOut}
+          coordinates={coordinates}
         />
       </div>
     </div>
