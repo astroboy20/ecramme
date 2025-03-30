@@ -10,7 +10,7 @@ import {
   Image as ImageIcon 
 } from "lucide-react";
 import Image from "next/image";
-import AboutModal from "./about";
+//import AboutModal from "./about";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -170,7 +170,8 @@ const Sidebar = () => {
               {[
                 { href: "/land-cover", label: "Land Cover" },
                 { href: "/population-growth", label: "Population Growth" },
-                { href: "/socioeconomic-status", label: "Socioeconomic Status" }
+                { href: "/socioeconomic-status", label: "Socioeconomic Status" },
+                { href: "/integrated coastal vulnerability index", label: "integrated coastal vulnerability index" }
               ].map((item) => (
                 <Link
                   key={item.href}
@@ -203,11 +204,11 @@ const Sidebar = () => {
 
           <div className="h-[1px] w-56 bg-slate-500 mt-10"></div>
 
-          <div className="mt-20 ml-2 h-9 text-center flex space-x-2">
+          {/* <div className="mt-20 ml-2 h-9 text-center flex space-x-2">
             <div className=" hover:bg-slate-800 rounded transition-all ease-linear duration-75">
               <AboutModal />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

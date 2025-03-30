@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { X } from "lucide-react";
+import { X, Info } from "lucide-react";
 
 const AboutModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,9 +24,9 @@ const AboutModal = () => {
     <div>
       <button 
         onClick={toggleModal}
-        className="px-4 py-2 text-xl text-slate-500"
+        className="fixed z-[1000] bottom-10 left-20 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-colors group"
       >
-        About
+        <Info/>
       </button>
 
       {isModalOpen && (

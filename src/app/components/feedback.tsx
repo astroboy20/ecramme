@@ -109,16 +109,23 @@ const FeedModal = () => {
           >
             {!isSubmitted ? (
               <>
-                <button
-                  onClick={toggleModal}
-                  className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 transition-colors"
-                >
-                  <X size={24} />
-                </button>
-
-                <h2 className="text-2xl text-blue-400 font-bold mb-4 text-center">
-                  ECRAMME
-                </h2>
+                 <div className="h-1  bg-blue-400 w-[950px] left-16"></div>
+                
+                            
+                            <div className="  mb-2">
+                            <button 
+                              onClick={toggleModal}
+                              className="absolute top-10 right-9 text-gray-600 hover:text-gray-900"
+                            >
+                              <X size={24} />
+                            </button>
+                 
+                            <h2 className="text-2xl text-blue-400 top-10 font-bold mb-4 text-start ml-5 mt-3">
+                              ECRAMME
+                            </h2>
+                            </div>
+                
+                            <div className="h-1 mb-4 bg-blue-400 w-[950px] left-16"></div>
 
                 <div className="space-y-4">
                   <p className="text-gray-600 text-start">

@@ -5,6 +5,7 @@ import { Download, ZoomIn, ZoomOut } from "lucide-react";
 import { useState } from "react";
 import { MapContainer } from "@/app/components/map";
 import FeedModal from "./feedback";
+import AboutModal from "./about";
 
 interface MapWithControlsProps {
   showSidebar?: boolean;
@@ -60,7 +61,7 @@ const MapWithControls = ({
                 <Download />
               </Button>
               {isDownload && (
-                <div className="absolute z-[500] left-full ml-2 bottom-0 bg-white shadow-lg border border-gray-200 rounded p-3">
+                <div className="absolute z-[500] left-full mr-10 bottom-0 w-40 mb-40 bg-white shadow-lg border border-gray-200 rounded p-3">
                   <p
                     className="cursor-pointer hover:underline"
                     onClick={() => setIsDownload(false)}
@@ -79,13 +80,14 @@ const MapWithControls = ({
           )}
         </div>
         
-        <Button className="bg-white text-black p-3 rounded-[4px] z-[50] border border-[#18252F]">
+        <Button className="bg-white text-black p-3 rounded-[4px] z-[50] border border-[#18252F] hover:bg-blue-300 transition-colors ease-linear duration-75">
           View Legend
         </Button>
       </div>
 
        <div className=" hover:bg-slate-800 rounded transition-all ease-linear duration-75">
                   <FeedModal/>
+                  <AboutModal/>
                   </div>
 
       <div className="min-h-screen flex flex-col">
