@@ -102,14 +102,14 @@ const FeedModal = () => {
           onClick={toggleModal}
         >
           <div
-            className={`bg-white rounded-xl shadow-2xl mt-20 w-[1000px]  max-h-[80vh] overflow-y-auto p-6 relative transition-all duration-300 ease-in-out transform ${
+            className={`bg-white rounded-xl shadow-2xl sm:z-[10000000] mt-20 w-[1000px]  max-h-[80vh] overflow-y-auto p-6 relative transition-all duration-300 ease-in-out transform ${
               isModalVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
             onClick={(e) => e.stopPropagation()}
           >
             {!isSubmitted ? (
               <>
-                 <div className="h-1  bg-blue-400 w-[950px] left-16"></div>
+                 <div className="h-1  bg-blue-400 lg:w-[950px] sm:w-52  left-16"></div>
                 
                             
                             <div className="  mb-2">
@@ -125,7 +125,7 @@ const FeedModal = () => {
                             </h2>
                             </div>
                 
-                            <div className="h-1 mb-4 bg-blue-400 w-[950px] left-16"></div>
+                            <div className="h-1  bg-blue-400 lg:w-[950px] sm:w-52  left-16"></div>
 
                 <div className="space-y-4">
                   <p className="text-gray-600 text-start">

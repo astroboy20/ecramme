@@ -12,13 +12,13 @@ const FlashFlood = () => {
       .get(
         "http://ec2-52-14-7-103.us-east-2.compute.amazonaws.com/api/collections/55cd0bed-2f4a-46b9-bc40-8f309e607551"
       )
-      .then((response) => {
+      .then((response: any) => {
         const features = response.data.features;
         const allCoordinates = features.map((feature: { coordinates: any }) => feature.coordinates);
         setCoordinates(allCoordinates);
         console.log(allCoordinates);
       })
-      .catch((error) => {
+      .catch((error: string) => {
         console.error(error);
       });
   }, []);

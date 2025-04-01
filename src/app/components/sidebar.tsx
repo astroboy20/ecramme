@@ -51,7 +51,7 @@ const Sidebar = () => {
       <div 
         className={`
           fixed top-0 left-0 z-50 bg-[#18252F] text-white 
-          w-[350px] h-full 
+          lg:w-[350px] sm:w-[200px] h-full 
           transform transition-transform duration-500 ease-in-out
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           overflow-y-auto pb-10
@@ -65,6 +65,16 @@ const Sidebar = () => {
           >
             <X size={24} />
           </button>
+        </div>
+
+        <div className="h-14 mt-1">
+        <Image
+                  height={100}
+                  width={150}
+                  src="/images/ecramme_logo.png"
+                  alt={"logo"}
+                  className="py-0 px-[-1px] pb-0 mt-[-40px] ml-10 mb-0"
+                />
         </div>
 
         <div className="px-6 pt-20">
@@ -171,7 +181,7 @@ const Sidebar = () => {
                 { href: "/land-cover", label: "Land Cover" },
                 { href: "/population-growth", label: "Population Growth" },
                 { href: "/socioeconomic-status", label: "Socioeconomic Status" },
-                { href: "/integrated coastal vulnerability index", label: "integrated coastal vulnerability index" }
+                { href: "/integrated-coastal-vulnerability-index", label: "Integrated Coastal Vulnerability Index" }
               ].map((item) => (
                 <Link
                   key={item.href}

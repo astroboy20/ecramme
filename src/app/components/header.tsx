@@ -25,8 +25,10 @@ const Header = () => {
         >
           <Sidebar/>
         </div>
-        <span className="text-[25px] mr-[1120px] font-[700]">ECRAMME</span>
-        
+        <span className="text-[25px] lg:mr-[1120px] font-[700] sm:mr-[12px]">ECRAMME</span>
+        <div className="h-1">
+                
+                </div>
        
       </div>
 

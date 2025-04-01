@@ -43,7 +43,7 @@ const AboutModal = () => {
                 : 'opacity-0 scale-95'}`}
             onClick={(e) => e.stopPropagation()}
           >
-  <div className="h-1  bg-blue-400 w-[950px] left-16"></div>
+  <div className="h-1  bg-blue-400 lg:w-[950px] sm:w-52  left-16"></div>
 
             
             <div className="  mb-2">
@@ -59,9 +59,9 @@ const AboutModal = () => {
             </h2>
             </div>
 
-            <div className="h-1 mb-4 bg-blue-400 w-[950px] left-16"></div>
+            <div className="h-1 mb-4 bg-blue-400 lg:w-[950px] sm:w-52 left-16"></div>
 
-            <div className="space-y-4">
+            <div className="space-y-4 sm:text-[10px]">
               <p className="text-black text-center">
                 The Enhancing Climate Resilience, Adaptation and Mitigation to the Impacts and Vulnerability of West Africa's Marine and Coastal Ecosystems (ECRAMME) project commenced in December 2024 and was publicly launched in April, 2025 through the funding from the UNESCO IOC Sub-commission for Africa and Adjacent Island States (IOCAFRICA).
               </p>

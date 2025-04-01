@@ -63,7 +63,7 @@ const MapWithControls = ({
                 <Download />
               </Button>
               {isDownload && (
-                <div className="absolute z-[500] left-full mr-10 bottom-0 w-40 mb-40 bg-white shadow-lg border border-gray-200 rounded p-3">
+                <div className="absolute z-[500]   text-[13px] mr-20 bottom-0 w-40 mb-40 bg-white shadow-lg border border-gray-200 rounded p-3">
                   <p
                     className="cursor-pointer hover:underline"
                     onClick={() => setIsDownload(false)}
@@ -82,7 +82,7 @@ const MapWithControls = ({
           )}
         </div>
         
-        <Button className="bg-white text-black p-3 rounded-[4px] z-[50] border border-[#18252F] hover:bg-blue-300 transition-colors ease-linear duration-75">
+        <Button className="bg-white text-[13px] text-black p-3 rounded-[4px] z-[50] border border-[#18252F] hover:bg-blue-300 transition-colors ease-linear duration-75">
           View Legend
         </Button>
       </div>
@@ -96,7 +96,7 @@ const MapWithControls = ({
         <MapContainer 
           setZoomIn={setZoomIn} 
           setZoomOut={setZoomOut}
-          coordinates={coordinates}
+         // coordinates={coordinates}
         />
       </div>
     </div>
