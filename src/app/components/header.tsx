@@ -25,11 +25,17 @@ const Header = () => {
         >
           <Sidebar/>
         </div>
-        <span className="text-[25px] lg:mr-[1120px] font-[700] sm:mr-[12px]">ECRAMME</span>
-        <div className="h-1">
-                
-                </div>
-           
+        {/* <span className="text-[25px] lg:mr-[1120px] font-[700] sm:mr-[12px]">ECRAMME</span> */}
+        <div className="h-14 mt-[-17px] lg:mr-[1150px] font-[700] sm:mr-[12px]">
+        <Image
+                  height={400}
+                  width={200}
+                  src="/images/ecramme_logo.png"
+                  alt={"logo"}
+                  className="py-0 px-[-1px] pb-0 mt-[-40px] ml-10 mb-0"
+                />
+        </div>
+
       </div>
 
     
