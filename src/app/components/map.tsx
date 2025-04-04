@@ -6,26 +6,78 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { Map, Satellite } from "lucide-react";
 import { fromUrl } from "geotiff";
 
+
 interface GeoTiffData {
   id: string;
   s3_url: string;
   date: string;
+  file_type?: string; 
 }
+
+interface FeatureData {
+  coordinates: Array<[number, number]>;
+  type?: string;
+  properties?: Record<string, any>;
+}
+
+
+interface FileTypeSettings {
+  color: string;
+  opacity: number;
+  label: string;
+}
+
 
 interface MapContainerProps {
-  setZoomIn: (zoomFn: () => void) => void;
-  setZoomOut: (zoomFn: () => void) => void;
+  setZoomIn?: (zoomFn: () => void) => void;
+  setZoomOut?: (zoomFn: () => void) => void;
   coordinates?: Array<Array<[number, number]>>;
+  dataType?: string;
+  fileType?: string;
+  dataUrl?: string;
+  initialCenter?: [number, number];  
+  initialZoom?: number;
+  polygonColor?: string;
+  polygonOpacity?: number;
+  showStyleToggle?: boolean;
 }
 
-const MapContainer = ({ setZoomIn, setZoomOut, coordinates }: MapContainerProps) => {
+const MapContainer = ({ 
+  setZoomIn, 
+  setZoomOut, 
+  coordinates, 
+  dataType = "geotiff", 
+  fileType,
+  dataUrl,
+  initialCenter = [-5.5471, 7.7460],
+  initialZoom = 5.5,
+  polygonColor = "#FF0000",
+  polygonOpacity = 0.5,
+  showStyleToggle = true
+}: MapContainerProps) => {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [currentStyle, setCurrentStyle] = useState("streets-v12");
+  const [currentStyle, setCurrentStyle] = useState("satellite-streets-v12");
   const [loadingStatus, setLoadingStatus] = useState<string>("Preparing map...");
   const [loadedCount, setLoadedCount] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
+  const [mapData, setMapData] = useState<GeoTiffData[] | FeatureData[]>([]);
+
+  
+  const fileTypeSettings: Record<string, FileTypeSettings> = {
+    flash_flood: {
+      color: "#0000FF", 
+      opacity: 0.4,
+      label: "Flash Flood"
+    },
+    population: {
+      color: "#FF9900", 
+      opacity: 0.5,
+      label: "Population"
+    },
+    
+  };
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -45,42 +97,41 @@ const MapContainer = ({ setZoomIn, setZoomOut, coordinates }: MapContainerProps)
     // Create a gradient similar to the reference image
     if (normalized < 0.25) {
       // Blue to cyan (0-25%)
-      const t = normalized * 4; // Scale to 0-1 range for this segment
+      const t = normalized * 4; 
       return [
-        0,                       // R: 0
-        Math.floor(150 + 105 * t), // G: 150 -> 255
-        255                      // B: 255
+        0,                      
+        Math.floor(150 + 105 * t), 
+        255                     
       ];
     } else if (normalized < 0.5) {
       // Cyan to green to yellow (25-50%)
-      const t = (normalized - 0.25) * 4; // Scale to 0-1 range for this segment
+      const t = (normalized - 0.25) * 4;
       return [
-        Math.floor(255 * t),     // R: 0 -> 255
-        255,                     // G: 255
-        Math.floor(255 * (1 - t)) // B: 255 -> 0
+        Math.floor(255 * t),    
+        255,                     
+        Math.floor(255 * (1 - t))
       ];
     } else if (normalized < 0.75) {
       // Yellow to orange (50-75%)
-      const t = (normalized - 0.5) * 4; // Scale to 0-1 range for this segment
+      const t = (normalized - 0.5) * 4;
       return [
-        255,                     // R: 255
-        Math.floor(255 - 130 * t), // G: 255 -> 125
-        0                        // B: 0
+        255,                    
+        Math.floor(255 - 130 * t),
+        0                        
       ];
     } else {
       // Orange to red (75-100%)
-      const t = (normalized - 0.75) * 4; // Scale to 0-1 range for this segment
+      const t = (normalized - 0.75) * 4;
       return [
-        255,                     // R: 255
-        Math.floor(125 - 125 * t), // G: 125 -> 0
-        0                        // B: 0
+        255,                    
+        Math.floor(125 - 125 * t),
+        0                       
       ];
     }
   };
   
   const loadGeoTIFF = async (item: GeoTiffData, map: mapboxgl.Map) => {
     try {
-      //console.log(`Loading GeoTIFF: ${item.id} - ${item.date}`);
       const tiff = await fromUrl(item.s3_url);
       const image = await tiff.getImage();
       
@@ -97,8 +148,6 @@ const MapContainer = ({ setZoomIn, setZoomOut, coordinates }: MapContainerProps)
         modelTiepoint[3] + (width * modelPixelScale[0]),        
         modelTiepoint[4]                                        
       ];
-      
-     // console.log(`GeoTIFF ${item.id} bounds:`, bounds);
       
       const rasters = await image.readRasters();
       const raster = rasters[0];
@@ -140,7 +189,6 @@ const MapContainer = ({ setZoomIn, setZoomOut, coordinates }: MapContainerProps)
           }
           
           // Apply a log scale for better visualization
-          // This helps show more variation in the lower values
           const logValue = Math.log(1 + value) / Math.log(1 + useMax);
           
           // Get color based on value
@@ -219,6 +267,87 @@ const MapContainer = ({ setZoomIn, setZoomOut, coordinates }: MapContainerProps)
     }
   };
 
+  
+  const fetchData = async () => {
+    if (!dataUrl) return;
+    
+    try {
+      
+      const url = dataUrl.includes('http') 
+        ? `/api/proxy?url=${encodeURIComponent(dataUrl)}`
+        : dataUrl;
+      
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (dataType === "geotiff") {
+        
+        let dataArray = Array.isArray(data) ? data : [data];
+        
+        
+        if (fileType) {
+          dataArray = dataArray.filter(item => item.file_type === fileType);
+        }
+        
+        setTotalCount(dataArray.length);
+        setMapData(dataArray);
+      } else if (dataType === "feature") {
+        
+        let features = data.features || data;
+        let featureData: FeatureData[] = [];
+        
+        if (Array.isArray(features)) {
+          featureData = features.map((feature: any) => ({
+            coordinates: feature.coordinates || 
+                        (feature.geometry?.coordinates && feature.geometry.coordinates[0]) || [],
+            type: feature.type || dataType,
+            properties: feature.properties || {}
+          }));
+        }
+        
+        setMapData(featureData);
+      }
+    } catch (err) {
+      console.error(`Error loading ${dataType} data:`, err);
+      setLoadingStatus(`Error loading ${dataType} data`);
+    }
+  };
+
+  
+  const renderPolygons = (map: mapboxgl.Map, polyCoordinates: Array<Array<[number, number]>>) => {
+    const geoJson: GeoJSON.FeatureCollection<GeoJSON.Geometry> = {
+      type: "FeatureCollection",
+      features: polyCoordinates.map((coords, index) => ({
+        type: "Feature",
+        geometry: {
+          type: "Polygon",
+          coordinates: [coords],
+        },
+        properties: { id: index },
+      })),
+    };
+
+    if (map.getSource("dataFeatures")) {
+      (map.getSource("dataFeatures") as mapboxgl.GeoJSONSource).setData(geoJson);
+    } else {
+      map.addSource("dataFeatures", {
+        type: "geojson",
+        data: geoJson,
+      });
+      map.addLayer({
+        id: "dataPolygons",
+        type: "fill",
+        source: "dataFeatures",
+        layout: {},
+        paint: {
+          "fill-color": polygonColor,
+          "fill-opacity": polygonOpacity,
+        },
+      });
+    }
+  };
+
+
   useEffect(() => {
     if (!mapContainerRef.current) return;
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "";
@@ -230,76 +359,77 @@ const MapContainer = ({ setZoomIn, setZoomOut, coordinates }: MapContainerProps)
       zoom: 1,
     });
 
-    setZoomIn(() => () => mapRef.current?.zoomTo(mapRef.current.getZoom() + 1));
-    setZoomOut(() => () => mapRef.current?.zoomTo(mapRef.current.getZoom() - 1));
+    if (setZoomIn) {
+      setZoomIn(() => () => mapRef.current?.zoomTo((mapRef.current?.getZoom() || 0) + 1));
+    }
+    
+    if (setZoomOut) {
+      setZoomOut(() => () => mapRef.current?.zoomTo((mapRef.current?.getZoom() || 0) - 1));
+    }
 
     mapRef.current.on("load", () => {
       mapRef.current?.flyTo({
-        center: [-5.5471, 7.7460],
-        zoom: 5.5,
+        center: initialCenter,
+        zoom: initialZoom,
         duration: 3000,
         essential: true,
       });
 
-      fetch(`/api/proxy?url=${encodeURIComponent('http://ec2-52-14-7-103.us-east-2.compute.amazonaws.com/api/collections/')}`)
-      .then((response) => response.json())
-        .then((apiData: GeoTiffData[]) => {
-          if (!apiData || apiData.length === 0) {
-            throw new Error("No GeoTIFF data available");
-          }
-          
-          setTotalCount(apiData.length);
-          setLoadingStatus(`Loading ${apiData.length} GeoTIFFs...`);
-          
-          if (mapRef.current) {
-            processBatchGeoTIFFs(apiData, mapRef.current);
-          }
-        })
-        .catch((err) => {
-          console.error("Error loading GeoTIFFs:", err);
-          setLoadingStatus("Error loading GeoTIFFs");
-        });
-    
+      
+      if (dataUrl) {
+        fetchData();
+      } else if (dataType === "geotiff") {
+        
+        fetch(`/api/proxy?url=${encodeURIComponent('http://ec2-52-14-7-103.us-east-2.compute.amazonaws.com/api/collections/')}`)
+          .then((response) => response.json())
+          .then((apiData: GeoTiffData[]) => {
+            if (!apiData || apiData.length === 0) {
+              throw new Error("No GeoTIFF data available");
+            }
+            
+            
+            let filteredData = fileType 
+              ? apiData.filter(item => item.file_type === fileType)
+              : apiData;
+            
+            setTotalCount(filteredData.length);
+            setLoadingStatus(`Loading ${filteredData.length} GeoTIFFs...`);
+            setMapData(filteredData);
+            
+            if (mapRef.current) {
+              processBatchGeoTIFFs(filteredData, mapRef.current);
+            }
+          })
+          .catch((err) => {
+            console.error("Error loading GeoTIFFs:", err);
+            setLoadingStatus("Error loading GeoTIFFs");
+          });
+      }
     });
 
     return () => {
       mapRef.current?.remove();
     };
-  }, [setZoomIn, setZoomOut, currentStyle]);
+  }, [setZoomIn, setZoomOut, currentStyle, dataUrl, dataType, fileType, initialCenter, initialZoom]);
 
+  // Process data when it changes
+  useEffect(() => {
+    if (!mapRef.current || mapData.length === 0) return;
+    
+    if (dataType === "geotiff") {
+      processBatchGeoTIFFs(mapData as GeoTiffData[], mapRef.current);
+    } else if (dataType === "feature") {
+      const featureData = mapData as FeatureData[];
+      const coordinatesArray = featureData.map(feature => feature.coordinates);
+      renderPolygons(mapRef.current, coordinatesArray);
+    }
+  }, [mapData, dataType]);
+
+  // Handle coordinates provided directly as props
   useEffect(() => {
     if (!mapRef.current || !coordinates) return;
-    const geoJson: GeoJSON.FeatureCollection<GeoJSON.Geometry> = {
-      type: "FeatureCollection",
-      features: coordinates.map((coords, index) => ({
-        type: "Feature",
-        geometry: {
-          type: "Polygon",
-          coordinates: [coords],
-        },
-        properties: { id: index },
-      })),
-    };
-
-    if (mapRef.current.getSource("floodFeatures")) {
-      (mapRef.current.getSource("floodFeatures") as mapboxgl.GeoJSONSource).setData(geoJson);
-    } else {
-      mapRef.current.addSource("floodFeatures", {
-        type: "geojson",
-        data: geoJson,
-      });
-      mapRef.current.addLayer({
-        id: "floodPolygons",
-        type: "fill",
-        source: "floodFeatures",
-        layout: {},
-        paint: {
-          "fill-color": "#FF0000",
-          "fill-opacity": 0.5,
-        },
-      });
-    }
-  }, [coordinates]);
+    renderPolygons(mapRef.current, coordinates);
+  }, [coordinates, polygonColor, polygonOpacity]);
 
   return (
     <div className="relative h-screen w-full">
@@ -317,36 +447,38 @@ const MapContainer = ({ setZoomIn, setZoomOut, coordinates }: MapContainerProps)
         </div>
       )}
       
-      <div className="absolute top-4 right-4 z-10">
-        <button
-          className="bg-white text-black border border-gray-400 p-2 mt-[450px] mr-10 rounded shadow-md text-[12px] hover:bg-blue-300 transition"
-          onClick={toggleMenu}
-        >
-          Map Style
-        </button>
-        {isOpen && (
-          <div className="absolute top-[350px] text-[15px] right-0 bg-white rounded shadow-md p-2 w-48">
-            <ul>
-              <li
-                className={`p-2 cursor-pointer hover:bg-gray-100 rounded flex items-center gap-2 ${
-                  currentStyle === "satellite-streets-v12" ? "bg-blue-100" : ""
-                }`}
-                onClick={() => changeMapStyle("satellite-streets-v12")}
-              >
-                <Satellite size={16} /> Satellite View
-              </li>
-              <li
-                className={`p-2 cursor-pointer hover:bg-gray-100 rounded flex items-center gap-2 ${
-                  currentStyle === "streets-v12" ? "bg-blue-100" : ""
-                }`}
-                onClick={() => changeMapStyle("streets-v12")}
-              >
-                <Map size={16} /> Street View
-              </li>
-            </ul>
-          </div>
-        )}
-      </div>
+      {showStyleToggle && (
+        <div className="absolute top-4 right-4 z-10">
+          <button
+            className="bg-white text-black border border-gray-400 p-2 mt-[450px] mr-10 rounded shadow-md text-[12px] hover:bg-blue-300 transition"
+            onClick={toggleMenu}
+          >
+            Map Style
+          </button>
+          {isOpen && (
+            <div className="absolute top-[350px] text-[15px] right-0 bg-white rounded shadow-md p-2 w-48">
+              <ul>
+                <li
+                  className={`p-2 cursor-pointer hover:bg-gray-100 rounded flex items-center gap-2 ${
+                    currentStyle === "satellite-streets-v12" ? "bg-blue-100" : ""
+                  }`}
+                  onClick={() => changeMapStyle("satellite-streets-v12")}
+                >
+                  <Satellite size={16} /> Satellite View
+                </li>
+                <li
+                  className={`p-2 cursor-pointer hover:bg-gray-100 rounded flex items-center gap-2 ${
+                    currentStyle === "streets-v12" ? "bg-blue-100" : ""
+                  }`}
+                  onClick={() => changeMapStyle("streets-v12")}
+                >
+                  <Map size={16} /> Street View
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

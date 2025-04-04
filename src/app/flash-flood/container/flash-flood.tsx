@@ -1,35 +1,26 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { Header } from "@/app/components/header";
-import { MapWithControls } from "@/app/components/map-with-controls";
-import axios from "axios";
+import { MapContainer } from "@/app/components/map";
 
 const FlashFlood = () => {
-  const [coordinates, setCoordinates] = useState<[number, number][][] | undefined>(undefined);
-
-  useEffect(() => {
-    axios
-      .get(
-        "http://ec2-52-14-7-103.us-east-2.compute.amazonaws.com/api/collections/55cd0bed-2f4a-46b9-bc40-8f309e607551"
-      )
-      .then((response: any) => {
-        const features = response.data.features;
-        const allCoordinates = features.map((feature: { coordinates: any }) => feature.coordinates);
-        setCoordinates(allCoordinates);
-        console.log(allCoordinates);
-      })
-      .catch((error: string) => {
-        console.error(error);
-      });
-  }, []);
-
   return (
     <div className="w-full">
       <div className="fixed w-full z-[100000000000000]">
         <Header />
       </div>
-      {/* Pass the extracted coordinates to your map component */}
-      <MapWithControls showSidebar={true} showExportButton={true} coordinates={coordinates} />
+      
+      <MapContainer 
+        dataType="geotiff"
+        fileType="flash_flood" // This will filter items with file_type="flash_flood"
+        dataUrl="http://ec2-52-14-7-103.us-east-2.compute.amazonaws.com/api/collections/"
+        polygonColor="#0000FF" // Blue for flash floods
+        polygonOpacity={0.6}
+        initialCenter={[-5.5471, 7.7460]}
+        initialZoom={5.5}
+        showStyleToggle={true}
+      />
     </div>
   );
 };

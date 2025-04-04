@@ -11,13 +11,23 @@ import { useRef } from "react";
 const ProjectedSealevel = () => {
   return (
     <div className="w-full">
-      {/* ✅ Fixed Header */}
-      <div className="fixed w-full z-[100000000000000]">
+      
+      <div className=" w-full z-[100000000000000]">
         <Header />
       </div>
 
-      {/* ✅ Use Reusable Component */}
-      <MapWithControls showSidebar={true} showExportButton={true} />
+      <MapContainer 
+        dataType="geotiff"
+        fileType="projected_sea_level_rise" 
+        dataUrl="http://ec2-52-14-7-103.us-east-2.compute.amazonaws.com/api/collections/"
+        polygonColor="red" 
+        polygonOpacity={0.6}
+        initialCenter={[-5.5471, 7.7460]}
+        initialZoom={5.5}
+        showStyleToggle={true}
+      />
+     
+      {/* <MapWithControls showSidebar={true} showExportButton={true} /> */}
     </div>
   );
 };

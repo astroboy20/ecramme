@@ -63,14 +63,14 @@ const MapWithControls = ({
 
   return (
     <div className="w-full relative">
-      {/* Sidebar */}
+    
       {showSidebar && (
         <div className="absolute top-24 left-7 z-[1000]">
           <Sidebar />
         </div>
       )}
 
-      {/* Zoom Buttons - Left Side */}
+     
       <div className="absolute right-[50px] top-36 transform -translate-y-1/2 z-[100] flex flex-col space-y-2">
         <Button 
           className="w-fit bg-[#18252F] p-2 rounded-md hover:bg-[#34495E] transition-colors" 
@@ -146,7 +146,7 @@ const MapWithControls = ({
         <MapContainer 
           setZoomIn={setZoomIn} 
           setZoomOut={setZoomOut}
-         // coordinates={coordinates}
+         
         />
       </div>
     </div>
