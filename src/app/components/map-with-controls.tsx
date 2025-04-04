@@ -10,9 +10,9 @@ import AboutModal from "./about";
 interface MapWithControlsProps {
   showSidebar?: boolean;
   showExportButton?: boolean;
-  coordinates?: Array<Array<[number, number]>>; 
+  coordinates?: Array<Array<[number, number]>>;
+  mapProps?: any; // Add this prop to pass through to MapContainer
 }
-
 
 const LegendGradient = ({ lowColor = 'blue', highColor = 'red' }) => {
   const gradientStyle = {
@@ -41,36 +41,33 @@ const LegendGradient = ({ lowColor = 'blue', highColor = 'red' }) => {
   );
 };
 
-
-
 const MapWithControls = ({
   showSidebar = true,
   showExportButton = true,
-  coordinates
+  coordinates,
+  mapProps = {} // Default to empty object if not provided
 }: MapWithControlsProps) => {
   const [zoomIn, setZoomIn] = useState<(() => void) | null>(null);
   const [zoomOut, setZoomOut] = useState<(() => void) | null>(null);
   const [isDownload, setIsDownload] = useState(false);
-  const [isLegend, setIsLegend] = useState(false)
+  const [isLegend, setIsLegend] = useState(false);
 
   const toggleDownload = () => {
     setIsDownload((prev) => !prev);
   };
 
   const toggleLegend = () => {
-    setIsLegend((prev) => !prev)
-  } 
+    setIsLegend((prev) => !prev);
+  };
 
   return (
     <div className="w-full relative">
-    
       {showSidebar && (
         <div className="absolute top-24 left-7 z-[1000]">
           <Sidebar />
         </div>
       )}
 
-     
       <div className="absolute right-[50px] top-36 transform -translate-y-1/2 z-[100] flex flex-col space-y-2">
         <Button 
           className="w-fit bg-[#18252F] p-2 rounded-md hover:bg-[#34495E] transition-colors" 
@@ -87,7 +84,7 @@ const MapWithControls = ({
       </div>
 
       {/* Bottom Left Controls */}
-      <div className="absolute bottom-7 right-9 top-[500px] flex gap-4 z-[100]  space-y-2">
+      <div className="absolute bottom-7 right-9 top-[500px] flex gap-4 z-[100] space-y-2">
         <div className="relative">
           {showExportButton && (
             <>
@@ -98,7 +95,7 @@ const MapWithControls = ({
                 <Download />
               </Button>
               {isDownload && (
-                <div className="absolute z-[500]   text-[13px] mr-20 bottom-0 w-40 mb-40 bg-white shadow-lg border border-gray-200 rounded p-3">
+                <div className="absolute z-[500] text-[13px] mr-20 bottom-0 w-40 mb-40 bg-white shadow-lg border border-gray-200 rounded p-3">
                   <p
                     className="cursor-pointer hover:underline"
                     onClick={() => setIsDownload(false)}
@@ -117,36 +114,39 @@ const MapWithControls = ({
           )}
         </div>
         
-        <Button className="bg-white text-[13px] text-black p-3 rounded-[4px] z-[50] border border-[#18252F] hover:bg-blue-300 transition-colors ease-linear duration-75"
-        onClick={toggleLegend}
+        <Button 
+          className="bg-white text-[13px] text-black p-3 rounded-[4px] z-[50] border border-[#18252F] hover:bg-blue-300 transition-colors ease-linear duration-75"
+          onClick={toggleLegend}
         >
           View Legend
         </Button>
-        {(
-          isLegend && <div className="absolute z-[500]   text-[13px] mr-20 bottom-0 w-40 mb-40 bg-white shadow-lg border border-gray-200 rounded p-3">
-         <h2 className="text-center">Legend</h2>
-      <LegendGradient lowColor="green" highColor="yellow" />
-      <LegendGradient />
-      <LegendGradient lowColor="purple" highColor="orange" />
-       <button onClick={toggleLegend}
-       className="text-center text-red-500 ml-10"
-       >
-        Close
-       </button>
-        </div>
+        {isLegend && (
+          <div className="absolute z-[500] text-[13px] mr-20 bottom-0 w-40 mb-40 bg-white shadow-lg border border-gray-200 rounded p-3">
+            <h2 className="text-center">Legend</h2>
+            <LegendGradient lowColor="green" highColor="yellow" />
+            <LegendGradient />
+            <LegendGradient lowColor="purple" highColor="orange" />
+            <button 
+              onClick={toggleLegend}
+              className="text-center text-red-500 ml-10"
+            >
+              Close
+            </button>
+          </div>
         )}
       </div>
 
-       <div className=" hover:bg-slate-800 rounded transition-all ease-linear duration-75">
-                  <FeedModal/>
-                  <AboutModal/>
-                  </div>
+      <div className="hover:bg-slate-800 rounded transition-all ease-linear duration-75">
+        <FeedModal />
+        <AboutModal />
+      </div>
 
       <div className="min-h-screen flex flex-col">
         <MapContainer 
           setZoomIn={setZoomIn} 
           setZoomOut={setZoomOut}
-         
+          coordinates={coordinates}
+          {...mapProps} // Spread all the props from mapProps
         />
       </div>
     </div>

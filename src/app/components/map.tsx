@@ -40,6 +40,7 @@ interface MapContainerProps {
   polygonColor?: string;
   polygonOpacity?: number;
   showStyleToggle?: boolean;
+  layerOpacity?: number; 
 }
 
 const MapContainer = ({ 
@@ -52,8 +53,9 @@ const MapContainer = ({
   initialCenter = [-5.5471, 7.7460],
   initialZoom = 5.5,
   polygonColor = "#FF0000",
-  polygonOpacity = 0.5,
-  showStyleToggle = true
+  polygonOpacity = 0.3,
+  showStyleToggle = true,
+  layerOpacity = 0.2
 }: MapContainerProps) => {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -198,7 +200,7 @@ const MapContainer = ({
           data[i * 4] = r;     // R
           data[i * 4 + 1] = g; // G
           data[i * 4 + 2] = b; // B
-          data[i * 4 + 3] = 220; // Alpha (semi-transparent)
+          data[i * 4 + 3] = 180; // Reduced alpha for better transparency (was 220)
         }
       } else {
         throw new Error("Unexpected raster type: number");
@@ -228,7 +230,7 @@ const MapContainer = ({
           type: 'raster',
           source: `geotiff-source-${item.id}`,
           paint: {
-            'raster-opacity': 0.8,
+            'raster-opacity': layerOpacity, 
             'raster-fade-duration': 0
           }
         });
@@ -327,24 +329,32 @@ const MapContainer = ({
       })),
     };
 
-    if (map.getSource("dataFeatures")) {
-      (map.getSource("dataFeatures") as mapboxgl.GeoJSONSource).setData(geoJson);
-    } else {
-      map.addSource("dataFeatures", {
-        type: "geojson",
-        data: geoJson,
-      });
-      map.addLayer({
-        id: "dataPolygons",
-        type: "fill",
-        source: "dataFeatures",
-        layout: {},
-        paint: {
-          "fill-color": polygonColor,
-          "fill-opacity": polygonOpacity,
-        },
-      });
+   
+    if (map.getLayer("dataPolygons")) {
+      map.removeLayer("dataPolygons");
     }
+    
+  
+    if (map.getSource("dataFeatures")) {
+      map.removeSource("dataFeatures");
+    }
+    
+    
+    map.addSource("dataFeatures", {
+      type: "geojson",
+      data: geoJson,
+    });
+    
+    map.addLayer({
+      id: "dataPolygons",
+      type: "fill",
+      source: "dataFeatures",
+      layout: {},
+      paint: {
+        "fill-color": polygonColor, 
+        "fill-opacity": polygonOpacity, 
+      },
+    });
   };
 
 
@@ -412,7 +422,7 @@ const MapContainer = ({
     };
   }, [setZoomIn, setZoomOut, currentStyle, dataUrl, dataType, fileType, initialCenter, initialZoom]);
 
-  // Process data when it changes
+  
   useEffect(() => {
     if (!mapRef.current || mapData.length === 0) return;
     
@@ -425,11 +435,34 @@ const MapContainer = ({
     }
   }, [mapData, dataType]);
 
-  // Handle coordinates provided directly as props
+ 
   useEffect(() => {
     if (!mapRef.current || !coordinates) return;
     renderPolygons(mapRef.current, coordinates);
   }, [coordinates, polygonColor, polygonOpacity]);
+
+ 
+ useEffect(() => {
+  if (!mapRef.current || !mapRef.current.isStyleLoaded()) {
+    return; 
+  }
+
+  const style = mapRef.current.getStyle();
+  if (style && style.layers) {
+    
+    style.layers.forEach(layer => {
+      if (layer.id.startsWith('geotiff-layer-') && mapRef.current) {
+        mapRef.current.setPaintProperty(layer.id, 'raster-opacity', layerOpacity);
+      }
+    });
+  }
+
+ 
+  if (mapRef.current.getLayer('dataPolygons')) {
+    mapRef.current.setPaintProperty('dataPolygons', 'fill-opacity', polygonOpacity);
+    mapRef.current.setPaintProperty('dataPolygons', 'fill-color', polygonColor);
+  }
+}, [layerOpacity, polygonOpacity, polygonColor]);
 
   return (
     <div className="relative h-screen w-full">

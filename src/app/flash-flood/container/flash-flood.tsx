@@ -1,25 +1,35 @@
-"use client";
 
-import { useEffect, useState } from "react";
+"use client";
 import { Header } from "@/app/components/header";
-import { MapContainer } from "@/app/components/map";
+import { MapWithControls } from "@/app/components/map-with-controls";
 
 const FlashFlood = () => {
+ 
+  const mapProps = {
+    dataType: "geotiff",
+    fileType:"flash_flood",
+    dataUrl: "http://ec2-52-14-7-103.us-east-2.compute.amazonaws.com/api/collections/",
+   polygonColor: "red",
+    polygonOpacity: 0.6,
+    initialCenter: [-5.5471, 7.7460],
+    initialZoom: 5.5,
+   // polygonColor:"#00FF00",
+    showStyleToggle: true,
+    showPolygons: false,
+  layerOpacity: 0.6
+  };
+
   return (
     <div className="w-full">
       <div className="fixed w-full z-[100000000000000]">
         <Header />
       </div>
       
-      <MapContainer 
-        dataType="geotiff"
-        fileType="flash_flood" // This will filter items with file_type="flash_flood"
-        dataUrl="http://ec2-52-14-7-103.us-east-2.compute.amazonaws.com/api/collections/"
-        polygonColor="#0000FF" // Blue for flash floods
-        polygonOpacity={0.6}
-        initialCenter={[-5.5471, 7.7460]}
-        initialZoom={5.5}
-        showStyleToggle={true}
+     
+      <MapWithControls 
+        showSidebar={true} 
+        showExportButton={true}
+        mapProps={mapProps} 
       />
     </div>
   );
