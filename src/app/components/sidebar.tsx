@@ -16,11 +16,9 @@ interface SidebarProp {
   isLightMode: boolean;
 }
 
-
 const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   
   const [isOpenCoastal, setIsOpenCoastal] = useState(false);
   const [isOpenForecast, setIsOpenForecast] = useState(false); 
@@ -29,74 +27,73 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
   
   const HamburgerButton = () => (
     <button 
       onClick={toggleSidebar} 
-      className="fixed top-4 left-4 z-50 text-white p-2 rounded-md hover:text-blue-500 transition-all"
+      className={`fixed top-4 left-4 z-50 p-2 rounded-md transition-all ${isLightMode ? 'text-blue-500' : 'text-white'}`}
     >
-      {isSidebarOpen ? null : <Menu className={`text-white hover:text-blue-500 transition-color size={24} ${isLightMode ? 'text-[#121212] hover:text-blue-500' : ''}`} />}
+      {isSidebarOpen ? null : <Menu className="text-blue-400 hover:text-blue-500 transition-colors" size={24} />}
     </button>
   );
+
+  const linkTextColor = isLightMode ? 'text-[#121212]' : 'text-white';
+  const hoverBgColor = isLightMode ? 'hover:bg-blue-300' : 'hover:bg-blue-400';
+  const categoryTextColor = isLightMode ? 'text-blue-800' : 'text-white';
 
   return (
     <>
       <HamburgerButton />
-
       
       {isSidebarOpen && (
         <div 
-          className="fixed inset-0  z-40"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={toggleSidebar}
         />
       )}
-
      
       <div 
         className={`
-          fixed top-0 left-0 z-50 bg-[#18252F] text-white
+          fixed top-0 left-0 z-50 
+          ${isLightMode ? 'bg-[#F5F5F5] text-[#121212]' : 'bg-[#18252F] text-white'}
           border-r-4 border-blue-400 
-          lg:w-[350px] sm:w-[200px] h-full 
+          lg:w-[350px] sm:w-[200px] w-full h-full 
           transform transition-transform duration-500 ease-in-out
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-          ${isLightMode ? 'bg-[#F5F5F5] text-[#121212]' : ''}
           overflow-y-auto pb-10
         `}
       >
-      
-        <div className="absolute top-4 right-4 z-60">
+        <div className="absolute top-4 right-4 z-50">
           <button 
             onClick={toggleSidebar} 
-            className={`text-white hover:text-blue-500 transition-color size={24} ${isLightMode ? 'text-[#121212] hover:text-blue-500' : ''}`}
+            className="text-blue-400 hover:text-blue-500 transition-colors"
           >
             <X size={24} />
           </button>
         </div>
 
         <div className="h-14 mt-1">
-        <Image
-                  height={100}
-                  width={150}
-                  src="/images/ecramme_logo.png"
-                  alt={"logo"}
-                  className="py-0 px-[-1px] pb-0 mt-[-40px] ml-10 mb-0"
-                />
+          <Image
+            height={100}
+            width={150}
+            src="/images/ecramme_logo.png"
+            alt="logo"
+            className="py-0 mt-[-17px] ml-10"
+          />
         </div>
 
-        <div className="px-6 pt-20">
+        <div className="px-6 pt-12">
           {/* Coastal Hazards Section */}
           <div className="flex flex-col gap-[10px]">
             <button
               onClick={() => setIsOpenCoastal(!isOpenCoastal)}
               className="flex flex-col items-start focus:outline-none"
             >
-              <p className="text-[12px] font-bold flex gap-5 items-center  h-10 rounded-md w-72 hover:bg-blue-400">
+              <p className={`text-[12px] font-bold flex gap-5 items-center h-10 rounded-md w-full ${hoverBgColor} ${categoryTextColor}`}>
                 <span className="ml-4">COASTAL HAZARDS</span> 
                 {isOpenCoastal ? <ChevronUp /> : <ChevronDown />}
               </p>
             </button>
-
            
             <div
               className={`transition-all duration-300 overflow-hidden ${
@@ -114,11 +111,11 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
               ].map((item) => (
                 <Link
                   key={item.href}
-                  className={`block${
+                  className={`block ${
                     pathname === item.href 
                       ? "bg-blue-400 text-black p-2 rounded-[4px]" 
-                      : "p-1 text-xs"
-                  }`}
+                      : `p-1 text-xs ${linkTextColor}`
+                  } ml-4`}
                   href={item.href}
                   onClick={toggleSidebar}
                 >
@@ -129,12 +126,12 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
           </div>
 
           {/* Early Warning Systems Section */}
-          <div className="flex flex-col gap-[10px]">
+          <div className="flex flex-col gap-[10px] mt-4">
             <button
               onClick={() => setIsOpenForecast(!isOpenForecast)}
               className="flex flex-col items-start focus:outline-none"
             >
-              <p className="text-[12px] font-bold flex gap-5 items-center h-10 rounded-md w-72 hover:bg-blue-400">
+              <p className={`text-[12px] font-bold flex gap-5 items-center h-10 rounded-md w-full ${hoverBgColor} ${categoryTextColor}`}>
                 <span className="ml-4">EARLY WARNING SYSTEMS</span> 
                 {isOpenForecast ? <ChevronUp /> : <ChevronDown />}
               </p>
@@ -156,8 +153,8 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
                   className={`block ${
                     pathname === item.href 
                       ? "bg-blue-400 text-black p-2 rounded-[4px]" 
-                      : "p-1 text-xs"
-                  }`}
+                      : `p-1 text-xs ${linkTextColor}`
+                  } ml-4`}
                   href={item.href}
                   onClick={toggleSidebar}
                 >
@@ -168,12 +165,12 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
           </div>
 
           {/* Impacts & Vulnerability Section */}
-          <div className="flex flex-col gap-[10px]">
+          <div className="flex flex-col gap-[10px] mt-4">
             <button
               onClick={() => setIsOpenImpactAndVulnerability(!isOpenImpactAndVulnerability)}
               className="flex flex-col items-start focus:outline-none"
             >
-              <p className="text-[12px] font-bold flex gap-5 items-center h-10 rounded-md w-72 hover:bg-blue-400">
+              <p className={`text-[12px] font-bold flex gap-5 items-center h-10 rounded-md w-full ${hoverBgColor} ${categoryTextColor}`}>
                 <span className="ml-4">IMPACTS & VULNERABILITY</span> 
                 {isOpenImpactAndVulnerability ? <ChevronUp /> : <ChevronDown />}
               </p>
@@ -194,9 +191,9 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
                   key={item.href}
                   className={`block ${
                     pathname === item.href 
-                      ? "bg-blue-400 text-black p-1 rounded-[4px]" 
-                      : "p-1 text-xs"
-                  }`}
+                      ? "bg-blue-400 text-black p-2 rounded-[4px]" 
+                      : `p-1 text-xs ${linkTextColor}`
+                  } ml-4`}
                   href={item.href}
                   onClick={toggleSidebar}
                 >
@@ -206,10 +203,10 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
             </div>
           </div>
 
-          <div className="h-[1px] w-56 bg-slate-500 mt-14"></div>
+          <div className="h-[1px] w-full bg-slate-500 mt-14"></div>
 
-          <div className="w-[200px]">
-            <h2 className="text-sm font-bold mt-4">PROUDLY SPONSORED BY:</h2>
+          <div className="w-full">
+            <h2 className={`text-sm font-bold mt-4 ${categoryTextColor}`}>PROUDLY SPONSORED BY:</h2>
             <Image
               src="/images/image2.png"
               width={500}
@@ -219,13 +216,7 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
             />
           </div>
 
-          <div className="h-[1px] w-56 bg-slate-500 mt-10"></div>
-
-          {/* <div className="mt-20 ml-2 h-9 text-center flex space-x-2">
-            <div className=" hover:bg-slate-800 rounded transition-all ease-linear duration-75">
-              <AboutModal />
-            </div>
-          </div> */}
+          <div className="h-[1px] w-full bg-slate-500 mt-10"></div>
         </div>
       </div>
     </>

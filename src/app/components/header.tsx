@@ -8,6 +8,16 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isLightMode, setIsLightMode] = useState<boolean>(false); 
 
+  useEffect(() => {
+   
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme === "light") {
+      setIsLightMode(true);
+      document.documentElement.classList.add("light"); 
+    } else {
+      document.documentElement.classList.remove("light");
+    }
+  }, []);
 
   const toggleLightMode = () => {
     setIsLightMode((prev) => !prev);
@@ -19,7 +29,7 @@ const Header = () => {
     setIsOpen(!isOpen);
   };
 
- 
+  
 
   return (
     <div className={`relative border-b-4 border-blue-400 bg-[#18252F] text-[#ECF5FB] z-[100] leading-[100%] px-7 py-5 ${isLightMode ? 'bg-[#F5F5F5] text-[#121212]' : ''}`}>
@@ -35,7 +45,7 @@ const Header = () => {
             width={200}
             src="/images/ecramme_logo.png"
             alt={"logo"}
-            className="py-0 px-[-1px] pb-0 mt-[-40px] ml-10 mb-0 mt-10"
+            className="py-0 px-[-1px] pb-0 mt-[-40px] ml-10 mb-0 "
           />
         </div>
 

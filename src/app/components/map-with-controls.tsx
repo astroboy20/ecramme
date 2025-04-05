@@ -64,7 +64,7 @@ const MapWithControls = ({
     <div className="w-full relative">
       {showSidebar && (
         <div className="absolute top-24 left-7 z-[1000]">
-          <Sidebar />
+          <Sidebar isLightMode={false}  />
         </div>
       )}
 
