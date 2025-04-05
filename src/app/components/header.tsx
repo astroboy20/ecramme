@@ -6,7 +6,6 @@ import { Sidebar } from "./sidebar";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isAbout, SetAbout] = useState<boolean>(false);
   const [isLightMode, setIsLightMode] = useState<boolean>(false); 
 
 
@@ -20,9 +19,7 @@ const Header = () => {
     setIsOpen(!isOpen);
   };
 
-  const About = () => {
-    SetAbout(!isAbout);
-  };
+ 
 
   return (
     <div className={`relative border-b-4 border-blue-400 bg-[#18252F] text-[#ECF5FB] z-[100] leading-[100%] px-7 py-5 ${isLightMode ? 'bg-[#F5F5F5] text-[#121212]' : ''}`}>
