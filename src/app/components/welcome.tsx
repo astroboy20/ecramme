@@ -43,11 +43,11 @@ const WelcomeModal = () => {
           onClick={closeModal}
         >
           <div
-            className={`bg-white rounded-lg shadow-xl w-full max-w-md mx-auto my-8 sm:my-20 p-6 relative transition-all duration-300 ease-in-out transform ${
+            className={`bg-white rounded-lg shadow-xl mt-20  w-[500px] p-6 relative transition-all duration-300 ease-in-out transform ${
               isModalVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
             }`}
             onClick={(e) => e.stopPropagation()}
-            style={{ maxHeight: 'auto' }}
+            style={{ maxHeight: 'auto' }} 
           >
             <button
               onClick={closeModal}
@@ -57,16 +57,16 @@ const WelcomeModal = () => {
             </button>
 
             <div className="flex flex-col items-center justify-center">
-              <div className="mb-6"> 
+              <div className="mb-10  top-36"> 
                 <Image
-                  height={60} 
-                  width={80}
+                  height={80}
+                  width={100}
                   src="/images/ecramme_logo.png"
                   alt={"logo"}
                 />
               </div>
-              <div style={{ overflowY: 'auto', maxHeight: 'calc(70vh - 120px)' }}> 
-                <p className="text-gray-700 font-bold text-center text-sm sm:text-base leading-relaxed" style={{ whiteSpace: 'pre-wrap' }}>
+              <div style={{ overflow: 'hidden', maxHeight: 'calc(70vh - 150px)' }}> 
+                <p className="text-gray-700 font-bold text-center text-sm sm:text-base" style={{ whiteSpace: 'pre-wrap' }}>
                   Welcome to the ECRAMME Dashboard.
 
                   This platform was co-developed to enhance adaptation, mitigation and resilience against climate change and coastal multi-hazards along the West Africa's marine and coastal ecosystems.
