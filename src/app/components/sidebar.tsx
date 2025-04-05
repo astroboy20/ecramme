@@ -12,11 +12,16 @@ import {
 import Image from "next/image";
 //import AboutModal from "./about";
 
-const Sidebar = () => {
+interface SidebarProp {
+  isLightMode: boolean;
+}
+
+
+const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Separate state for each collapsible section
+  
   const [isOpenCoastal, setIsOpenCoastal] = useState(false);
   const [isOpenForecast, setIsOpenForecast] = useState(false); 
   const [isOpenImpactAndVulnerability, setIsOpenImpactAndVulnerability] = useState(false);
@@ -31,7 +36,7 @@ const Sidebar = () => {
       onClick={toggleSidebar} 
       className="fixed top-4 left-4 z-50 text-white p-2 rounded-md hover:text-blue-500 transition-all"
     >
-      {isSidebarOpen ? null : <Menu className="text-white hover:text-blue-500" size={24} />}
+      {isSidebarOpen ? null : <Menu className={`text-white hover:text-blue-500 transition-color size={24} ${isLightMode ? 'text-[#121212] hover:text-blue-500' : ''}`} />}
     </button>
   );
 
@@ -39,7 +44,7 @@ const Sidebar = () => {
     <>
       <HamburgerButton />
 
-      {/* Sidebar Overlay */}
+      
       {isSidebarOpen && (
         <div 
           className="fixed inset-0  z-40"
@@ -47,21 +52,23 @@ const Sidebar = () => {
         />
       )}
 
-      {/* Sidebar */}
+     
       <div 
         className={`
-          fixed top-0 left-0 z-50 bg-[#18252F] text-white 
+          fixed top-0 left-0 z-50 bg-[#18252F] text-white
+          border-r-4 border-blue-400 
           lg:w-[350px] sm:w-[200px] h-full 
           transform transition-transform duration-500 ease-in-out
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          ${isLightMode ? 'bg-[#F5F5F5] text-[#121212]' : ''}
           overflow-y-auto pb-10
         `}
       >
-        {/* Close Button within Sidebar */}
+      
         <div className="absolute top-4 right-4 z-60">
           <button 
             onClick={toggleSidebar} 
-            className="text-white hover:text-blue-500 transition-colors"
+            className={`text-white hover:text-blue-500 transition-color size={24} ${isLightMode ? 'text-[#121212] hover:text-blue-500' : ''}`}
           >
             <X size={24} />
           </button>
@@ -84,13 +91,13 @@ const Sidebar = () => {
               onClick={() => setIsOpenCoastal(!isOpenCoastal)}
               className="flex flex-col items-start focus:outline-none"
             >
-              <p className="text-[12px] flex gap-5 items-center  h-10 rounded-md w-72 hover:bg-slate-700">
+              <p className="text-[12px] font-bold flex gap-5 items-center  h-10 rounded-md w-72 hover:bg-blue-400">
                 <span className="ml-4">COASTAL HAZARDS</span> 
                 {isOpenCoastal ? <ChevronUp /> : <ChevronDown />}
               </p>
             </button>
 
-            {/* Animated collapsible container */}
+           
             <div
               className={`transition-all duration-300 overflow-hidden ${
                 isOpenCoastal ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
@@ -107,9 +114,9 @@ const Sidebar = () => {
               ].map((item) => (
                 <Link
                   key={item.href}
-                  className={`block ${
+                  className={`block${
                     pathname === item.href 
-                      ? "bg-[#ECF5FB] text-black p-2 rounded-[4px]" 
+                      ? "bg-blue-400 text-black p-2 rounded-[4px]" 
                       : "p-1 text-xs"
                   }`}
                   href={item.href}
@@ -127,7 +134,7 @@ const Sidebar = () => {
               onClick={() => setIsOpenForecast(!isOpenForecast)}
               className="flex flex-col items-start focus:outline-none"
             >
-              <p className="text-[12px] flex gap-5 items-center h-10 rounded-md w-72 hover:bg-slate-700">
+              <p className="text-[12px] font-bold flex gap-5 items-center h-10 rounded-md w-72 hover:bg-blue-400">
                 <span className="ml-4">EARLY WARNING SYSTEMS</span> 
                 {isOpenForecast ? <ChevronUp /> : <ChevronDown />}
               </p>
@@ -148,7 +155,7 @@ const Sidebar = () => {
                   key={item.href}
                   className={`block ${
                     pathname === item.href 
-                      ? "bg-[#ECF5FB] text-black p-2 rounded-[4px]" 
+                      ? "bg-blue-400 text-black p-2 rounded-[4px]" 
                       : "p-1 text-xs"
                   }`}
                   href={item.href}
@@ -166,7 +173,7 @@ const Sidebar = () => {
               onClick={() => setIsOpenImpactAndVulnerability(!isOpenImpactAndVulnerability)}
               className="flex flex-col items-start focus:outline-none"
             >
-              <p className="text-[12px] flex gap-5 items-center h-10 rounded-md w-72 hover:bg-slate-700">
+              <p className="text-[12px] font-bold flex gap-5 items-center h-10 rounded-md w-72 hover:bg-blue-400">
                 <span className="ml-4">IMPACTS & VULNERABILITY</span> 
                 {isOpenImpactAndVulnerability ? <ChevronUp /> : <ChevronDown />}
               </p>
@@ -187,7 +194,7 @@ const Sidebar = () => {
                   key={item.href}
                   className={`block ${
                     pathname === item.href 
-                      ? "bg-[#ECF5FB] text-black p-1 rounded-[4px]" 
+                      ? "bg-blue-400 text-black p-1 rounded-[4px]" 
                       : "p-1 text-xs"
                   }`}
                   href={item.href}
@@ -202,7 +209,7 @@ const Sidebar = () => {
           <div className="h-[1px] w-56 bg-slate-500 mt-14"></div>
 
           <div className="w-[200px]">
-            <h2 className="text-sm mt-4">PROUDLY SPONSORED BY:</h2>
+            <h2 className="text-sm font-bold mt-4">PROUDLY SPONSORED BY:</h2>
             <Image
               src="/images/image2.png"
               width={500}

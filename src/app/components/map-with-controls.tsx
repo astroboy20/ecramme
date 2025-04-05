@@ -45,7 +45,7 @@ const MapWithControls = ({
   showSidebar = true,
   showExportButton = true,
   coordinates,
-  mapProps = {} // Default to empty object if not provided
+  mapProps = {} 
 }: MapWithControlsProps) => {
   const [zoomIn, setZoomIn] = useState<(() => void) | null>(null);
   const [zoomOut, setZoomOut] = useState<(() => void) | null>(null);
@@ -146,7 +146,7 @@ const MapWithControls = ({
           setZoomIn={setZoomIn} 
           setZoomOut={setZoomOut}
           coordinates={coordinates}
-          {...mapProps} // Spread all the props from mapProps
+          {...mapProps} 
         />
       </div>
     </div>

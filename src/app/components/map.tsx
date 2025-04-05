@@ -468,7 +468,7 @@ const MapContainer = ({
     <div className="relative h-screen w-full">
       <div className="h-screen w-full" ref={mapContainerRef} />
       
-      {loadedCount < totalCount && totalCount > 0 && (
+      {/* {loadedCount < totalCount && totalCount > 0 && (
         <div className="absolute top-52 left-4 z-10 bg-white p-2 rounded shadow-md">
           <div className="text-sm">{loadingStatus}</div>
           <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1">
@@ -478,7 +478,7 @@ const MapContainer = ({
             ></div>
           </div>
         </div>
-      )}
+      )} */}
       
       {showStyleToggle && (
         <div className="absolute top-4 right-4 z-10">
