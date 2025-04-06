@@ -101,7 +101,7 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
               }`}
             >
               {[
-                { href: "/", label: "Coastal Floods" },
+                { href: "/coastal-flood", label: "Coastal Floods" },
                 { href: "/flash-flood", label: "Flash Flood" },
                 { href: "/sea-level", label: "Sea Level Rise" },
                 { href: "/marine-heatwaves", label: "Marine Heatwaves" },

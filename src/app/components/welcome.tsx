@@ -43,7 +43,7 @@ const WelcomeModal = () => {
           onClick={closeModal}
         >
           <div
-            className={`bg-white rounded-lg shadow-xl mt-20  w-[500px] p-6 relative transition-all duration-300 ease-in-out transform ${
+            className={`bg-white rounded-lg shadow-xl mt-20  w-[900px]  relative transition-all duration-300 ease-in-out transform ${
               isModalVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
             }`}
             onClick={(e) => e.stopPropagation()}
@@ -56,16 +56,16 @@ const WelcomeModal = () => {
               <X size={24} />
             </button>
 
-            <div className="flex flex-col items-center justify-center">
-              <div className="mb-10  top-36"> 
-                <Image
-                  height={80}
-                  width={100}
-                  src="/images/ecramme_logo.png"
-                  alt={"logo"}
-                />
-              </div>
-              <div style={{ overflow: 'hidden', maxHeight: 'calc(70vh - 150px)' }}> 
+            
+            <div className="mb-16 lg:mr-[100px]  flex justify-center items-center object-center h-[some-height]">
+  <Image
+    height={80}
+    width={150}
+    src="/images/ecramme_logo.png"
+    alt={"logo"}
+  />
+</div>
+              <div className="mt-[-100px]"> 
                 <p className="text-gray-700 font-bold text-center text-sm sm:text-base" style={{ whiteSpace: 'pre-wrap' }}>
                   Welcome to the ECRAMME Dashboard.
 
@@ -76,7 +76,7 @@ const WelcomeModal = () => {
                   The project is funded by the UNESCO’s Intergovernmental Oceanographic Commission (IOC) Sub-Commission for Africa and the Adjacent Island States (IOCAFRICA).
                 </p>
               </div>
-            </div>
+            
           </div>
         </div>
       )}
