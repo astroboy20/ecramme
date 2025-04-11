@@ -23,6 +23,7 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
   const [isOpenCoastal, setIsOpenCoastal] = useState(false);
   const [isOpenForecast, setIsOpenForecast] = useState(false); 
   const [isOpenImpactAndVulnerability, setIsOpenImpactAndVulnerability] = useState(false);
+   const [isAdaptation, setIsOpenAdaptation] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -202,6 +203,47 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
               ))}
             </div>
           </div>
+
+
+          <div className="flex flex-col gap-[10px] mt-4">
+            <button
+              onClick={() => setIsOpenAdaptation(!isAdaptation)}
+              className="flex flex-col items-start focus:outline-none"
+            >
+              <p className={`text-[12px] font-bold flex gap-5 items-center h-10 rounded-md w-full ${hoverBgColor} ${categoryTextColor}`}>
+                <span className="ml-4">ADAPTATION & MITIGATION </span> 
+                {isAdaptation ? <ChevronUp /> : <ChevronDown />}
+              </p>
+            </button>
+
+            <div
+              className={`transition-all duration-300 overflow-hidden ${
+                isAdaptation ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+              }`}
+            >
+              {[
+                { href: "#", label: "Blue Economy " },
+                { href: "#", label: "Restoring Protected Areas" },
+                { href: "#", label: "GHG Emissions Reduction" },
+                { href: "#", label: "Maritime Green Shipping" },
+                { href: "#", label: "Sustainable Agriculture, Fisheries & Aquaculture" }
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  className={`block ${
+                    pathname === item.href 
+                      ? "bg-blue-400 text-black p-2 rounded-[4px]" 
+                      : `p-1 text-xs ${linkTextColor}`
+                  } ml-4`}
+                  href={item.href}
+                  onClick={toggleSidebar}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
 
           <div className="h-[1px] w-full bg-slate-500 mt-14"></div>
 

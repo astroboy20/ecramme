@@ -5,6 +5,7 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Map, Satellite } from "lucide-react";
 import { fromUrl } from "geotiff";
+import { DateRange } from "react-day-picker";
 
 
 interface GeoTiffData {
@@ -40,9 +41,10 @@ interface MapContainerProps {
   polygonColor?: string;
   polygonOpacity?: number;
   showStyleToggle?: boolean;
-  layerOpacity?: number; 
+  layerOpacity?: number;
+  fromDate?: Date;
+  toDate?: Date; 
 }
-
 const MapContainer = ({ 
   setZoomIn, 
   setZoomOut, 
@@ -55,7 +57,9 @@ const MapContainer = ({
   polygonColor = "#FF0000",
   polygonOpacity = 0.3,
   showStyleToggle = true,
-  layerOpacity = 0.2
+  layerOpacity = 0.2,
+  fromDate,
+  toDate
 }: MapContainerProps) => {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -269,12 +273,10 @@ const MapContainer = ({
     }
   };
 
-  
   const fetchData = async () => {
     if (!dataUrl) return;
     
     try {
-      
       const url = dataUrl.includes('http') 
         ? `/api/proxy?url=${encodeURIComponent(dataUrl)}`
         : dataUrl;
@@ -283,17 +285,33 @@ const MapContainer = ({
       const data = await response.json();
       
       if (dataType === "geotiff") {
-        
         let dataArray = Array.isArray(data) ? data : [data];
         
-        
+        // Filter by file type if specified
         if (fileType) {
           dataArray = dataArray.filter(item => item.file_type === fileType);
         }
         
+        // Filter by date if date range is specified
+        if (fromDate || toDate) {
+          dataArray = dataArray.filter(item => {
+            if (!item.date) return true;
+            
+            const itemDate = new Date(item.date);
+            
+            // Check if item date is after fromDate (if fromDate is provided)
+            const isAfterFromDate = fromDate ? itemDate >= fromDate : true;
+            
+            // Check if item date is before toDate (if toDate is provided)
+            const isBeforeToDate = toDate ? itemDate <= toDate : true;
+            
+            return isAfterFromDate && isBeforeToDate;
+          });
+        }
+        
         setTotalCount(dataArray.length);
         setMapData(dataArray);
-      } else if (dataType === "feature") {
+      }  else if (dataType === "feature") {
         
         let features = data.features || data;
         let featureData: FeatureData[] = [];
@@ -315,6 +333,35 @@ const MapContainer = ({
     }
   };
 
+
+
+  useEffect(() => {
+    if (mapRef.current && mapRef.current.isStyleLoaded() && dataUrl) {
+      // Clear existing geotiff layers
+      const style = mapRef.current.getStyle();
+      if (style && style.layers) {
+        style.layers.forEach(layer => {
+          if (layer.id.startsWith('geotiff-layer-') && mapRef.current) {
+            mapRef.current.removeLayer(layer.id);
+          }
+        });
+        
+        // Also remove sources
+        Object.keys(style.sources).forEach(source => {
+          if (source.startsWith('geotiff-source-') && mapRef.current) {
+            mapRef.current.removeSource(source);
+          }
+        });
+      }
+      
+      // Reset counters
+      setLoadedCount(0);
+      setTotalCount(0);
+      
+      // Fetch data again with new date filter
+      fetchData();
+    }
+  }, [fromDate, toDate]);
   
   const renderPolygons = (map: mapboxgl.Map, polyCoordinates: Array<Array<[number, number]>>) => {
     const geoJson: GeoJSON.FeatureCollection<GeoJSON.Geometry> = {

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Download, ZoomIn, ZoomOut } from "lucide-react";
 import { useState } from "react";
 import { MapContainer } from "@/app/components/map";
+import { DateFilter } from "@/app/components/date-filter";
 import FeedModal from "./feedback";
 import AboutModal from "./about";
 
@@ -11,7 +12,8 @@ interface MapWithControlsProps {
   showSidebar?: boolean;
   showExportButton?: boolean;
   coordinates?: Array<Array<[number, number]>>;
-  mapProps?: any; // Add this prop to pass through to MapContainer
+  mapProps?: any;
+  showDateFilter?: boolean;
 }
 
 const LegendGradient = ({ lowColor = 'blue', highColor = 'red' }) => {
@@ -45,12 +47,15 @@ const MapWithControls = ({
   showSidebar = true,
   showExportButton = true,
   coordinates,
-  mapProps = {} 
+  mapProps = {},
+  showDateFilter = true
 }: MapWithControlsProps) => {
   const [zoomIn, setZoomIn] = useState<(() => void) | null>(null);
   const [zoomOut, setZoomOut] = useState<(() => void) | null>(null);
   const [isDownload, setIsDownload] = useState(false);
   const [isLegend, setIsLegend] = useState(false);
+  const [fromDate, setFromDate] = useState<Date | undefined>(new Date(2020, 0, 1));
+  const [toDate, setToDate] = useState<Date | undefined>(new Date());
 
   const toggleDownload = () => {
     setIsDownload((prev) => !prev);
@@ -60,14 +65,30 @@ const MapWithControls = ({
     setIsLegend((prev) => !prev);
   };
 
+  const handleDateChange = (from: Date | undefined, to: Date | undefined) => {
+    setFromDate(from);
+    setToDate(to);
+  };
+
+  // Include fromDate and toDate in mapProps
+  const combinedMapProps = {
+    ...mapProps,
+    fromDate,
+    toDate,
+    setZoomIn,
+    setZoomOut,
+    coordinates
+  };
+
   return (
     <div className="w-full relative">
       {showSidebar && (
         <div className="absolute top-24 left-7 z-[1000]">
-          <Sidebar isLightMode={false}  />
+          <Sidebar isLightMode={false} />
         </div>
       )}
 
+    
       <div className="absolute right-[50px] top-36 transform -translate-y-1/2 z-[100] flex flex-col space-y-2">
         <Button 
           className="w-fit bg-[#18252F] p-2 rounded-md hover:bg-[#34495E] transition-colors" 
@@ -83,9 +104,28 @@ const MapWithControls = ({
         </Button>
       </div>
 
+
+     
+
+
       {/* Bottom Left Controls */}
       <div className="absolute bottom-7 right-9 top-[500px] flex gap-4 z-[100] space-y-2">
+
+      {/* {showDateFilter && (
+        <div className="absolute top-20 z-[10000] right-10 mr-2 ">
+          <DateFilter 
+            onDateRangeChange={handleDateChange}
+            initialFromDate={fromDate}
+            initialToDate={toDate}
+          />
+        </div>
+      )} */}
+
+
         <div className="relative">
+
+ 
+
           {showExportButton && (
             <>
               <Button 
@@ -134,6 +174,10 @@ const MapWithControls = ({
             </button>
           </div>
         )}
+
+
+
+
       </div>
 
       <div className="hover:bg-slate-800 rounded transition-all ease-linear duration-75">
@@ -142,12 +186,7 @@ const MapWithControls = ({
       </div>
 
       <div className="min-h-screen flex flex-col">
-        <MapContainer 
-          setZoomIn={setZoomIn} 
-          setZoomOut={setZoomOut}
-          coordinates={coordinates}
-          {...mapProps} 
-        />
+        <MapContainer {...combinedMapProps} />
       </div>
     </div>
   );

@@ -29,6 +29,7 @@ const FlashFlood = () => {
       <MapWithControls 
         showSidebar={true} 
         showExportButton={true}
+        showDateFilter={true}
         mapProps={mapProps} 
       />
     </div>
