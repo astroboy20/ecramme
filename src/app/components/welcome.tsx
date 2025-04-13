@@ -37,13 +37,13 @@ const WelcomeModal = () => {
     <>
       {isModalOpen && (
         <div
-          className={`fixed inset-0 bg-black transition-opacity duration-300 ease-in-out flex justify-center items-center z-[9999] p-4 ${
+          className={`fixed inset-0 bg-black transition-opacity duration-300 ease-in-out flex justify-center items-center z-[9999] ] ${
             isModalVisible ? 'bg-opacity-70' : 'bg-opacity-0'
           }`}
           onClick={closeModal}
         >
           <div
-            className={`bg-white rounded-lg shadow-xl mt-20  w-[900px]  relative transition-all duration-300 ease-in-out transform ${
+            className={`bg-white rounded-lg shadow-xl mt-7  w-[600px]  relative transition-all duration-300 ease-in-out transform ${
               isModalVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
             }`}
             onClick={(e) => e.stopPropagation()}
@@ -57,16 +57,16 @@ const WelcomeModal = () => {
             </button>
 
             
-            <div className="mb-16 lg:mr-[100px]  flex justify-center items-center object-center h-[some-height]">
+            <div className="mb-10 mt-[-40px] lg:mr-[100px]  flex justify-center items-center object-center  h-[some-height]">
   <Image
     height={80}
-    width={150}
+    width={200}
     src="/images/ecramme_logo.png"
     alt={"logo"}
   />
 </div>
               <div className="mt-[-100px]"> 
-                <p className="text-gray-700 font-bold text-center text-sm sm:text-base" style={{ whiteSpace: 'pre-wrap' }}>
+                <p className="text-gray-700 font-sm text-center text-sm sm:text-base" style={{ whiteSpace: 'pre-wrap' }}>
                   Welcome to the ECRAMME Dashboard.
 
                   This platform was co-developed to enhance adaptation, mitigation and resilience against climate change and coastal multi-hazards along the West Africa's marine and coastal ecosystems.

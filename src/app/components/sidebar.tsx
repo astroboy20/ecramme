@@ -222,8 +222,10 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
               }`}
             >
               {[
-                { href: "#", label: "Blue Economy " },
+                { href: "#", label: "Blue Economy " }, 
                 { href: "#", label: "Restoring Protected Areas" },
+                { href: "#", label: "Biodiversity Conservation" },
+                { href: "#", label: "Capacity Building" },
                 { href: "#", label: "GHG Emissions Reduction" },
                 { href: "#", label: "Maritime Green Shipping" },
                 { href: "#", label: "Sustainable Agriculture, Fisheries & Aquaculture" }
