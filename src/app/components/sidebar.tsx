@@ -258,6 +258,22 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
               alt="bra-logo"
               className="h-[40px] w-auto object-contain mt-4"
             />
+           
+            <Image
+              src="/images/Eccral.png"
+              width={500}
+              height={500}
+              alt="bra-logo"
+              className="h-[150px] w-auto object-contain -mt-2"
+            />
+             
+            <Image
+              src="/images/UN_Ocean.jpg"
+              width={700}
+              height={700}
+              alt="bra-logo"
+              className="h-[100px] w-auto object-contain -mt-2"
+            />
           </div>
 
           <div className="h-[1px] w-full bg-slate-500 mt-10"></div>
