@@ -115,7 +115,7 @@ const MapWithControls = ({
       onDateRangeChange={handleDateChange}
       initialFromDate={fromDate}
       initialToDate={toDate}
-      className="mr-4"
+     
     />
   </div>
 )}
