@@ -1,0 +1,59 @@
+  .rdp-custom thead {
+    display: table-header-group !important;
+  }
+  
+  .rdp-custom tbody {
+    display: table-row-group !important;
+  }
+  
+  .rdp-custom .rdp-week,
+  .rdp-custom .rdp-weekdays {
+    display: table-row !important;
+  }
+  
+  .rdp-custom .rdp-week td,
+  .rdp-custom .rdp-weekdays th {
+    display: table-cell !important;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    vertical-align: middle;
+    text-align: center;
+  }
+  
+  /* Override flexbox on table cells */
+  .rdp-custom td.h-8.w-8.p-0.font-normal.flex {
+    display: table-cell !important;
+    flex: none !important;
+  }
+  
+  /* Center day buttons within cells */
+  .rdp-custom .rdp-day_button {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
+  
+
+  /* In your CSS */
+@media (max-width: 640px) {
+    .date-filter-footer {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+
+  /* Add to your date-filter.css */
+@media (max-width: 640px) {
+    .rdp-week {
+      padding: 0 0.5rem;
+    }
+    .rdp-day {
+      height: 2rem;
+      width: 2rem;
+    }
+  }

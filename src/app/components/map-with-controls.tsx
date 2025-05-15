@@ -89,7 +89,7 @@ const MapWithControls = ({
       )}
 
     
-      <div className="absolute right-[50px] top-36 transform -translate-y-1/2 z-[100] flex flex-col space-y-2">
+      <div className="absolute right-[50px] top-36 transform -translate-y-1/2 z-50 flex flex-col space-y-2">
         <Button 
           className="w-fit bg-[#18252F] p-2 rounded-md hover:bg-[#34495E] transition-colors" 
           onClick={() => zoomIn && zoomIn()}
@@ -108,18 +108,22 @@ const MapWithControls = ({
      
 
 
+
+      {showDateFilter && (
+  <div className="fixed bottom-0.5 w-10 mr-52 right-4 lg:right-96 lg:bottom-auto lg:top-[700px] z-[1000]">
+    <DateFilter 
+      onDateRangeChange={handleDateChange}
+      initialFromDate={fromDate}
+      initialToDate={toDate}
+      className="mr-4"
+    />
+  </div>
+)}
+
       {/* Bottom Left Controls */}
       <div className="absolute bottom-7 right-9 top-[500px] flex gap-4 z-[100] space-y-2">
 
-      {/* {showDateFilter && (
-        <div className="absolute top-20 z-[10000] right-10 mr-2 ">
-          <DateFilter 
-            onDateRangeChange={handleDateChange}
-            initialFromDate={fromDate}
-            initialToDate={toDate}
-          />
-        </div>
-      )} */}
+     
 
 
         <div className="relative">

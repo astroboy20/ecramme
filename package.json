@@ -27,6 +27,8 @@
     "next": "^14.2.26",
     "plotty": "^0.4.9",
     "react": "^18",
+    "react-calendar": "^5.1.0",
+    "react-date-range": "^2.0.1",
     "react-datepicker": "^8.3.0",
     "react-day-picker": "^9.6.5",
     "react-dom": "^18",

@@ -102,3 +102,10 @@
     
   }
 }
+
+
+.rdp {
+  --rdp-cell-size: 36px; /* matches h-9 */
+  --rdp-accent-color: #3b82f6;
+  --rdp-background-color: #eff6ff;
+}

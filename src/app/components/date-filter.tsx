@@ -1,5 +1,4 @@
-"use client";
-
+import "./date-filter.css"; 
 import { useState, useEffect } from "react";
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { format, addMonths, subMonths, setYear, getYear } from "date-fns";
@@ -18,10 +17,10 @@ interface DateFilterProps {
   initialToDate?: Date;
 }
 
-const DateFilter = ({ 
-  onDateRangeChange, 
-  initialFromDate = new Date(2020, 0, 1), 
-  initialToDate = new Date() 
+const DateFilter = ({
+  onDateRangeChange,
+  initialFromDate = new Date(2020, 0, 1),
+  initialToDate = new Date()
 }: DateFilterProps) => {
   const [month, setMonth] = useState<Date>(initialFromDate);
   const [selectedFrom, setSelectedFrom] = useState<Date | undefined>(initialFromDate);
@@ -29,7 +28,7 @@ const DateFilter = ({
   const [isOpen, setIsOpen] = useState(false);
   const [selectionMode, setSelectionMode] = useState<'from' | 'to'>('from');
 
-  // Generate year options from 2020 to current year
+  
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: currentYear - 2019 }, (_, i) => 2020 + i);
 
@@ -50,7 +49,7 @@ const DateFilter = ({
     if (selectionMode === 'from') {
       setSelectedFrom(day);
       setSelectionMode('to');
-      
+
       // If the newly selected "from" date is after current "to" date,
       // reset the "to" date
       if (selectedTo && day > selectedTo) {
@@ -102,8 +101,8 @@ const DateFilter = ({
   }, []);
 
   return (
-    <div className="bg-white p-2 rounded-md shadow-md z-50 w-64">
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
+    <div className="bg-white p-0 mr-9 rounded-md shadow-md z-[1000] w-64">
+      <Popover  open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
@@ -113,7 +112,9 @@ const DateFilter = ({
             <span className="truncate">{formatDateRange()}</span>
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent  className="w-auto p-0 z-[1100]" 
+        align="start"
+        style={{ zIndex: 1001 }}>
           <div className="w-full p-2 flex items-center justify-between border-b">
             <Button 
               size="sm" 
@@ -122,7 +123,7 @@ const DateFilter = ({
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            
+
             <div className="flex items-center space-x-1">
               <span>{format(month, "MMMM")}</span>
               <Select
@@ -151,7 +152,7 @@ const DateFilter = ({
             </Button>
           </div>
           
-          <div className="h-[280px] w-[300px]">
+          <div className="lg:p-4 z-[800] ">
             <DayPicker
               mode="single"
               selected={selectionMode === 'from' ? selectedFrom : selectedTo}
@@ -159,23 +160,30 @@ const DateFilter = ({
               onMonthChange={setMonth}
               onDayClick={handleDayClick}
               showOutsideDays
+              className="rdp-custom"
+              modifiersClassNames={{
+                selected: "bg-blue-600 text-white",
+                today: "border border-blue-500"
+              }}
               classNames={{
-                months: "w-full",
-                month: "w-full",
+                months: "",
+                month: "",
                 caption: "hidden", // Hide default caption as we have custom header
-                table: "w-full border-collapse",
-                head_row: "flex w-full",
-                head_cell: "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem] flex-1 text-center",
-                row: "flex w-full mt-2",
-                cell: "h-9 w-9 flex-1 flex items-center justify-center text-center text-sm p-0 relative",
-                day: "h-8 w-8 p-0 font-normal flex items-center justify-center rounded-full hover:bg-blue-100",
-                day_selected: "bg-blue-600 text-white hover:bg-blue-700",
-                day_today: "border border-blue-500",
+                table: "w-full",
+                head_row: "rdp-weekdays",
+                head_cell: "text-muted-foreground text-[0.8rem] font-normal text-center",
+                row: "rdp-week",
+                cell: "",
+                day: "h-8 w-8 p-0",
+                day_selected: "",
+                day_today: "",
                 day_outside: "text-muted-foreground opacity-50",
                 day_disabled: "text-muted-foreground opacity-50",
+                
+                
               }}
               footer={
-                <div className="p-2 border-t flex justify-between">
+                <div className="p-2 border-t flex justify-between mt-2">
                   {selectedFrom && (
                     <div className="text-xs">
                       <div>{selectionMode === 'to' ? 'Select end date' : 'Select start date'}</div>
