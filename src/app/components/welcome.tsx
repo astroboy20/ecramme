@@ -73,7 +73,6 @@ const WelcomeModal = () => {
 
                   ECRAMME provides access to a detailed database of past extreme events, organized along several risk indicators, and a unique repository of coastal hazard information to support end-users for both emergency and long term risk planning actions.
 
-                  The project is funded by the UNESCO’s Intergovernmental Oceanographic Commission (IOC) Sub-Commission for Africa and the Adjacent Island States (IOCAFRICA).
                 </p>
               </div>
             

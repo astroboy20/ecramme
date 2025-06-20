@@ -250,7 +250,7 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
           <div className="h-[1px] w-full bg-slate-500 mt-14"></div>
 
           <div className="w-full">
-            <h2 className={`text-sm font-bold mt-4 ${categoryTextColor}`}>PROUDLY SPONSORED BY:</h2>
+            {/* <h2 className={`text-sm font-bold mt-4 ${categoryTextColor}`}>PROUDLY SPONSORED BY:</h2>
             <Image
               src="/images/image2.png"
               width={500}
@@ -273,7 +273,7 @@ const Sidebar: React.FC<SidebarProp> = ({isLightMode}) => {
               height={700}
               alt="bra-logo"
               className="h-[100px] w-auto object-contain -mt-2"
-            />
+            /> */}
           </div>
 
           <div className="h-[1px] w-full bg-slate-500 mt-10"></div>

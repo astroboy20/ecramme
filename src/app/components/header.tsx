@@ -39,15 +39,22 @@ const Header = () => {
           <Sidebar isLightMode={isLightMode} /> 
         </div>
         {/* <span className="text-[25px] lg:mr-[1120px] font-[700] sm:mr-[12px]">ECRAMME</span> */}
-        <div className="h-14  lg:top-[5px] lg:mr-[1150px] font-[700] sm:mr-[120px] sm:mt-[-10px] sm:p-0 sm:h-10 w-[150px] mt-[-10px] mr-[100px] ">
-          <Image
-            height={400}
-            width={200}
-            src="/images/ecramme_logo.png"
-            alt={"logo"}
-            className="py-0 px-[-1px] pb-0 mt-[-40px] ml-10 mb-0 "
-          />
-        </div>
+       <div className="h-14 lg:gap-x-4 lg:items-start  flex lg:top-[5px] lg:mr-[1150px] font-[700] sm:mr-[120px] sm:mt-[-10px] sm:p-0 sm:h-10 w-[150px] mt-[-10px] mr-[100px] ">
+  <Image
+    height={700}
+    width={700}
+    src="/images/ecramme_logo.png"
+    alt={"logo"}
+  className="py-2 px-[-1px] pb-0 mt-[-50px] ml-10 mb-0 "
+  />
+  <Image
+    height={700}
+    width={400}
+    src="/images/image1.jpg"
+    alt={"logo2"}
+  //  className="py-0 px-[-1px] pb-0 mt-[-40px] ml-10 mb-0 "
+  />
+</div>
 
         <button
           onClick={toggleLightMode}
