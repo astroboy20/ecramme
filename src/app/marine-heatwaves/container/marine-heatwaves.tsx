@@ -17,7 +17,7 @@ const MarineHeatWaves = () => {
       </div>
 
       {/* ✅ Use Reusable Component */}
-      {/* <MapWithControls showSidebar={true} showExportButton={true} /> */}
+      <MapWithControls showSidebar={true} showExportButton={true} />
     </div>
   );
 };
