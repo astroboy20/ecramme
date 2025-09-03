@@ -92,13 +92,7 @@ const DateFilter = ({
     return "Select dates";
   };
 
-  useEffect(() => {
-    if (initialFromDate && initialToDate) {
-      setSelectedFrom(initialFromDate);
-      setSelectedTo(initialToDate);
-      onDateRangeChange(initialFromDate, initialToDate);
-    }
-  }, []);
+  
 
   return (
     <div className="bg-white p-0 mr-9 rounded-md shadow-md z-[1000] w-64">

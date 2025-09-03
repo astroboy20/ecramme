@@ -5,10 +5,29 @@ import { MapWithControls } from "@/app/components/map-with-controls";
 import { Sidebar } from "@/app/components/sidebar";
 import { Button } from "@/components/ui/button";
 import { Download, PlusIcon, MinusIcon } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 
 
 const ProjectedStorm = () => {
+  const [projectedStormsGeoJSON, setProjectedStormsGeoJSON] = useState<GeoJSON.FeatureCollection | null>(null);
+
+  useEffect(() => {
+    const fetchGeoJSON = async () => {
+      try {
+        const response = await fetch("/geojsons/Projected Storms.geojson");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data: GeoJSON.FeatureCollection = await response.json();
+        setProjectedStormsGeoJSON(data);
+      } catch (error) {
+        console.error("Error fetching Projected Storms GeoJSON:", error);
+      }
+    };
+
+    fetchGeoJSON();
+  }, []);
+
   return (
     <div className="w-full">
       {/* ✅ Fixed Header */}
@@ -17,7 +36,7 @@ const ProjectedStorm = () => {
       </div>
 
       {/* ✅ Use Reusable Component */}
-      <MapWithControls showSidebar={true} showExportButton={true} />
+      <MapWithControls showSidebar={true} showExportButton={true} geojson={projectedStormsGeoJSON} />
     </div>
   );
 };

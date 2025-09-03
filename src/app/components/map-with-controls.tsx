@@ -14,6 +14,7 @@ interface MapWithControlsProps {
   coordinates?: Array<Array<[number, number]>>;
   mapProps?: any;
   showDateFilter?: boolean;
+  geojson?: GeoJSON.FeatureCollection | null; // Allow null for GeoJSON data
 }
 
 const LegendGradient = ({ lowColor = 'blue', highColor = 'red' }) => {
@@ -48,7 +49,8 @@ const MapWithControls = ({
   showExportButton = true,
   coordinates,
   mapProps = {},
-  showDateFilter = true
+  showDateFilter = true,
+  geojson // Destructure new prop
 }: MapWithControlsProps) => {
   const [zoomIn, setZoomIn] = useState<(() => void) | null>(null);
   const [zoomOut, setZoomOut] = useState<(() => void) | null>(null);
@@ -77,7 +79,8 @@ const MapWithControls = ({
     toDate,
     setZoomIn,
     setZoomOut,
-    coordinates
+    coordinates,
+    geojson
   };
 
   return (

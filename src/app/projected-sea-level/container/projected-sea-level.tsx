@@ -5,21 +5,27 @@
 import { Header } from "@/app/components/header";
 import { MapWithControls } from "@/app/components/map-with-controls";
 
+import { useEffect, useState } from "react";
+
 const ProjectedSealevel = () => {
- 
-  const mapProps = {
-    dataType: "geotiff",
-    fileType:"projected_sea_level_rise",
-    dataUrl: "http://ec2-52-14-7-103.us-east-2.compute.amazonaws.com/api/collections/",
-   polygonColor: "red",
-    polygonOpacity: 0.6,
-    initialCenter: [-5.5471, 7.7460],
-    initialZoom: 5.5,
-   // polygonColor:"#00FF00",
-    showStyleToggle: true,
-    showPolygons: false,
-  layerOpacity: 0.6
-  };
+  const [projectedSeaLevelGeoJSON, setProjectedSeaLevelGeoJSON] = useState<GeoJSON.FeatureCollection | null>(null);
+
+  useEffect(() => {
+    const fetchGeoJSON = async () => {
+      try {
+        const response = await fetch("/geojsons/Projected Sea Level Rise.geojson");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data: GeoJSON.FeatureCollection = await response.json();
+        setProjectedSeaLevelGeoJSON(data);
+      } catch (error) {
+        console.error("Error fetching Projected Sea Level Rise GeoJSON:", error);
+      }
+    };
+
+    fetchGeoJSON();
+  }, []);
 
   return (
     <div className="w-full">
@@ -27,11 +33,10 @@ const ProjectedSealevel = () => {
         <Header />
       </div>
       
-     
       <MapWithControls 
         showSidebar={true} 
         showExportButton={true}
-        mapProps={mapProps} 
+        geojson={projectedSeaLevelGeoJSON} 
       />
     </div>
   );

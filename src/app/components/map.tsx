@@ -44,6 +44,7 @@ interface MapContainerProps {
   layerOpacity?: number;
   fromDate?: Date;
   toDate?: Date; 
+  geojson?: GeoJSON.FeatureCollection | null; // Allow null for GeoJSON data
 }
 const MapContainer = ({ 
   setZoomIn, 
@@ -59,7 +60,8 @@ const MapContainer = ({
   showStyleToggle = true,
   layerOpacity = 0.2,
   fromDate,
-  toDate
+  toDate,
+  geojson // Destructure new prop
 }: MapContainerProps) => {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -409,6 +411,12 @@ const MapContainer = ({
     if (!mapContainerRef.current) return;
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "";
 
+    if (!mapboxgl.accessToken) {
+      console.error("Mapbox access token is not set. Please set NEXT_PUBLIC_MAPBOX_TOKEN environment variable.");
+      setLoadingStatus("Error: Mapbox access token missing.");
+      return;
+    }
+
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: `mapbox://styles/mapbox/${currentStyle}`,
@@ -424,7 +432,7 @@ const MapContainer = ({
       setZoomOut(() => () => mapRef.current?.zoomTo((mapRef.current?.getZoom() || 0) - 1));
     }
 
-    mapRef.current.on("load", () => {
+    mapRef.current.on("style.load", () => {
       mapRef.current?.flyTo({
         center: initialCenter,
         zoom: initialZoom,
@@ -432,18 +440,15 @@ const MapContainer = ({
         essential: true,
       });
 
-      
       if (dataUrl) {
         fetchData();
       } else if (dataType === "geotiff") {
-        
         fetch(`/api/proxy?url=${encodeURIComponent('http://ec2-52-14-7-103.us-east-2.compute.amazonaws.com/api/collections/')}`)
           .then((response) => response.json())
           .then((apiData: GeoTiffData[]) => {
             if (!apiData || apiData.length === 0) {
               throw new Error("No GeoTIFF data available");
             }
-            
             
             let filteredData = fileType 
               ? apiData.filter(item => item.file_type === fileType)
@@ -510,6 +515,108 @@ const MapContainer = ({
     mapRef.current.setPaintProperty('dataPolygons', 'fill-color', polygonColor);
   }
 }, [layerOpacity, polygonOpacity, polygonColor]);
+
+  useEffect(() => {
+    if (!mapRef.current || !geojson) return;
+
+    const map = mapRef.current;
+
+    // Ensure map style is loaded before adding sources/layers
+    if (!map.isStyleLoaded()) {
+      map.on("style.load", () => {
+        addGeoJsonLayer(map, geojson);
+      });
+    } else {
+      addGeoJsonLayer(map, geojson);
+    }
+
+  }, [geojson]);
+
+  const addGeoJsonLayer = (map: mapboxgl.Map, geojson: GeoJSON.FeatureCollection) => {
+    const sourceId = "geojson-data-source";
+    const layerId = "geojson-data-layer";
+
+    // Remove existing source and layer if they exist
+    if (map.getLayer(layerId)) {
+      map.removeLayer(layerId);
+    }
+    if (map.getSource(sourceId)) {
+      map.removeSource(sourceId);
+    }
+
+    // Add new source
+    map.addSource(sourceId, {
+      type: "geojson",
+      data: geojson,
+    });
+
+    // Add a layer for the points
+    map.addLayer({
+      id: layerId,
+      type: "circle",
+      source: sourceId,
+      paint: {
+        "circle-color": "#FF00FF", // Magenta color for GeoJSON points
+        "circle-radius": 6,
+        "circle-stroke-width": 2,
+        "circle-stroke-color": "#FFFFFF",
+      },
+    });
+
+    // Add click event for popups
+    map.on("click", layerId, (e) => {
+      if (e.features && e.features.length > 0) {
+        const feature = e.features[0];
+        const properties = feature.properties;
+        let description = "";
+        for (const key in properties) {
+          if (properties.hasOwnProperty(key)) {
+            description += `<strong>${key}:</strong> ${properties[key]}<br/>`;
+          }
+        }
+        let coordinates: mapboxgl.LngLatLike | undefined;
+
+        if (feature.geometry.type === "Point") {
+          coordinates = feature.geometry.coordinates as mapboxgl.LngLatLike;
+        } else if (feature.geometry.type === "LineString" || feature.geometry.type === "MultiLineString") {
+          // For LineString, use the first coordinate
+          coordinates = (feature.geometry as GeoJSON.LineString).coordinates[0] as mapboxgl.LngLatLike;
+        } else if (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon") {
+          // For Polygon, use the first coordinate of the first ring
+          coordinates = (feature.geometry as GeoJSON.Polygon).coordinates[0][0] as mapboxgl.LngLatLike;
+        } else if (feature.geometry.type === "GeometryCollection") {
+          // For GeometryCollection, try to find a Point or the first coordinate of the first geometry
+          const firstGeometry = (feature.geometry as GeoJSON.GeometryCollection).geometries[0];
+          if (firstGeometry) {
+            if (firstGeometry.type === "Point") {
+              coordinates = firstGeometry.coordinates as mapboxgl.LngLatLike;
+            } else if (firstGeometry.type === "LineString") {
+              coordinates = (firstGeometry as GeoJSON.LineString).coordinates[0] as mapboxgl.LngLatLike;
+            } else if (firstGeometry.type === "Polygon") {
+              coordinates = (firstGeometry as GeoJSON.Polygon).coordinates[0][0] as mapboxgl.LngLatLike;
+            }
+          }
+        }
+
+        if (coordinates) {
+          new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map);
+        }
+      }
+    });
+
+    // Change the cursor to a pointer when the mouse is over the places layer.
+    map.on("mouseenter", layerId, () => {
+      map.getCanvas().style.cursor = "pointer";
+    });
+
+    // Change it back to a grab cursor when it leaves.
+    map.on("mouseleave", layerId, () => {
+      map.getCanvas().style.cursor = "grab";
+    });
+  };
 
   return (
     <div className="relative h-screen w-full">
