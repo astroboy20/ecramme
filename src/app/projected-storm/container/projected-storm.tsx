@@ -36,7 +36,15 @@ const ProjectedStorm = () => {
       </div>
 
       {/* ✅ Use Reusable Component */}
-      <MapWithControls showSidebar={true} showExportButton={true} geojson={projectedStormsGeoJSON} />
+      <MapWithControls 
+        showSidebar={true} 
+        showExportButton={true}
+        geojson={projectedStormsGeoJSON}
+        mapProps={{
+          initialCenter: [-5.5471, 7.7460],
+          initialZoom: 5.5,
+        }}
+      />
     </div>
   );
 };

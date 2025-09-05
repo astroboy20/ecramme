@@ -29,13 +29,19 @@ const MarineHeatWaves = () => {
   }, []);
   return (
     <div className="w-full">
-      {/* ✅ Fixed Header */}
       <div className="fixed w-full z-[100000000000000]">
         <Header />
       </div>
 
-      {/* ✅ Use Reusable Component */}
-      <MapWithControls showSidebar={true} showExportButton={true} geojson={marineHeatwavesGeoJSON} />
+      <MapWithControls 
+        showSidebar={true} 
+        showExportButton={true}
+        geojson={marineHeatwavesGeoJSON}
+        mapProps={{
+          initialCenter: [-5.5471, 7.7460],
+          initialZoom: 5.5,
+        }}
+      />
     </div>
   );
 };

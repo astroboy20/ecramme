@@ -36,7 +36,11 @@ const ProjectedSealevel = () => {
       <MapWithControls 
         showSidebar={true} 
         showExportButton={true}
-        geojson={projectedSeaLevelGeoJSON} 
+        geojson={projectedSeaLevelGeoJSON}
+        mapProps={{
+          initialCenter: [-5.5471, 7.7460],
+          initialZoom: 5.5,
+        }}
       />
     </div>
   );

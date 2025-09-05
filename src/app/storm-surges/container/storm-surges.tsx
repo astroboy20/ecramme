@@ -33,7 +33,15 @@ const StormSurges = () => {
         <Header />
       </div>
 
-      <MapWithControls showSidebar={true} showExportButton={true} geojson={StormSurgeGeoJSON} />
+      <MapWithControls 
+        showSidebar={true} 
+        showExportButton={true}
+        geojson={StormSurgeGeoJSON}
+        mapProps={{
+          initialCenter: [-5.5471, 7.7460],
+          initialZoom: 5.5,
+        }}
+      />
     </div>
   );
 };
